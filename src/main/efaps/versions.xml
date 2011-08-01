@@ -17,9 +17,9 @@
   limitations under the License.
 
   Author:          The eFaps Team
-  Revision:        $Rev: 6667 $
-  Last Changed:    $Date: 2011-06-27 09:38:46 -0500 (Mon, 27 Jun 2011) $
-  Last Changed By: $Author: melissa.rojas@moxter.net $
+  Revision:        $Rev$
+  Last Changed:    $Date$
+  Last Changed By: $Author$
 
 -->
 
@@ -41,6 +41,30 @@
     <version number="1" reloadCache="false" login="true" compile="true">
         <description>Install ERP-Archives Basic Modul.</description>
         <script type="groovy">
+        import org.efaps.admin.runlevel.RunLevel;
+        import org.efaps.db.Context;
+        import org.efaps.db.SearchQuery;
+        import org.efaps.esjp.admin.ui.UIUpdate;
+        import org.efaps.importer.DataImport;
+
+        import java.net.URL
+        import java.io.File;
+
+        EFAPS_LOGGER.info("Importing Data for eFapsApp-Archives");
+
+        RunLevel.init("shell");
+        RunLevel.execute();
+
+        SearchQuery query = new SearchQuery();
+        query.setQueryTypes("Admin_User_JAASKey");
+        query.addWhereExprEqValue("Key", "Archives_Admin");
+        query.addSelect("OID");
+        query.execute();
+        if (!query.next()) {
+            URL url1 = new URL(EFAPS_ROOTURL, "Data/IMPORT_UserJAASKey.xml");
+            DataImport imp1 = DataImport.readFile(url1);
+            imp1.updateInDB();
+        }
         </script>
     </version>
 </install>
