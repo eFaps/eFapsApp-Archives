@@ -32,7 +32,7 @@
     <definition>
         <version-expression>(version==latest)</version-expression>
         <name>Archives_ArchiveFile</name>
-        <parent>Archives_ArchiveAbstract</parent>
+        <parent>Archives_ArchiveNode</parent>
 
         <attribute>
             <name>FileLength</name>
