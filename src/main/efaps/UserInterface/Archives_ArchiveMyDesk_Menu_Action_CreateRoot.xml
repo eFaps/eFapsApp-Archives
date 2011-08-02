@@ -17,9 +17,9 @@
  limitations under the License.
 
  Author:          The eFaps Team
- Revision:        $Rev: 1 $
- Last Changed:    $Date: 2010-09-28 14:27:45 -0500 (Tue, 28 Sep 2010) $
- Last Changed By: $Author: miguel.a.aranya $
+ Revision:        $Rev$
+ Last Changed:    $Date$
+ Last Changed By: $Author$
 
 -->
 
@@ -28,7 +28,7 @@
             xsi:schemaLocation="http://www.efaps.org/xsd http://www.efaps.org/xsd/eFaps_1.0.xsd">
     <uuid>a431f398-7482-4579-937a-f27e6b8ce671</uuid>
     <file-application>eFapsApp-Archives</file-application>
-    <file-revision>$Rev: 1 $</file-revision>
+    <file-revision>$Rev$</file-revision>
     <definition>
         <version-expression>(version==latest)</version-expression>
         <name>Archives_ArchiveMyDesk_Menu_Action_CreateRoot</name>

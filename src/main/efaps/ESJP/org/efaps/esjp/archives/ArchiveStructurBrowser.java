@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * Revision:        $Rev: 1 $
- * Last Changed:    $Date: 2010-11-29 16:17:39 -0500 (lun, 29 nov 2010) $
- * Last Changed By: $Author: jan@moxter.net $
+ * Revision:        $Rev$
+ * Last Changed:    $Date$
+ * Last Changed By: $Author$
  */
 
 package org.efaps.esjp.archives;
@@ -30,10 +30,10 @@ import org.efaps.admin.program.esjp.EFapsUUID;
  * class.
  *
  * @author The eFaps Team
- * @version $Id: TreeViewStructurBrowser.java 5876 2010-11-29 21:17:39Z jan@moxter.net $
+ * @version $Id$
  */
 @EFapsUUID("d76eaf4e-bcb8-4b06-8e35-9bf574c845bd")
-@EFapsRevision("$Rev: 1 $")
+@EFapsRevision("$Rev$")
 public class ArchiveStructurBrowser
     extends ArchiveStructurBrowser_Base
 {

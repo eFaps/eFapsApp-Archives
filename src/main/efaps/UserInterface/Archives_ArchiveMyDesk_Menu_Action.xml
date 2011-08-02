@@ -17,9 +17,9 @@
  limitations under the License.
 
  Author:          The eFaps Team
- Revision:        $Rev: 1 $
- Last Changed:    $Date: 2010-09-28 14:27:45 -0500 (Tue, 28 Sep 2010) $
- Last Changed By: $Author: miguel.a.aranya $
+ Revision:        $Rev$
+ Last Changed:    $Date$
+ Last Changed By: $Author$
 
 -->
 
@@ -29,7 +29,7 @@
 
     <uuid>55f73462-b704-4d01-8d1a-d456a8a86ee4</uuid>
     <file-application>eFapsApp-Archives</file-application>
-    <file-revision>$Rev: 1 $</file-revision>
+    <file-revision>$Rev$</file-revision>
 
     <definition>
         <version-expression>(version==latest)</version-expression>

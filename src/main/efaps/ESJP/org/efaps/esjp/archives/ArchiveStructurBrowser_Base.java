@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * Revision:        $Rev: 1 $
- * Last Changed:    $Date: 2010-12-22 22:37:33 -0500 (mié, 22 dic 2010) $
- * Last Changed By: $Author: jan@moxter.net $
+ * Revision:        $Rev$
+ * Last Changed:    $Date$
+ * Last Changed By: $Author$
  */
 
 package org.efaps.esjp.archives;
@@ -54,7 +54,7 @@ import org.slf4j.LoggerFactory;
  *          jan@moxter.net $
  */
 @EFapsUUID("6197af7c-2b19-40e8-8a7c-abaf0b329ac4")
-@EFapsRevision("$Rev: 1 $")
+@EFapsRevision("$Rev$")
 public abstract class ArchiveStructurBrowser_Base
     implements EventExecution
 {
