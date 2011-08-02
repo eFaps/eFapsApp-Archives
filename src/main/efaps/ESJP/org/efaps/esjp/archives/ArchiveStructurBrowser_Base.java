@@ -39,6 +39,7 @@ import org.efaps.db.AttributeQuery;
 import org.efaps.db.Instance;
 import org.efaps.db.InstanceQuery;
 import org.efaps.db.QueryBuilder;
+import org.efaps.esjp.ci.CIArchives;
 import org.efaps.ui.wicket.models.objects.UIStructurBrowser;
 import org.efaps.ui.wicket.models.objects.UIStructurBrowser.ExecutionStatus;
 import org.efaps.util.EFapsException;
@@ -47,9 +48,10 @@ import org.slf4j.LoggerFactory;
 
 /**
  * TODO description!
- *
+ * 
  * @author The eFasp Team
- * @version $Id: TreeViewStructurBrowser_Base.java 5979 2010-12-23 03:37:33Z jan@moxter.net $
+ * @version $Id: TreeViewStructurBrowser_Base.java 5979 2010-12-23 03:37:33Z
+ *          jan@moxter.net $
  */
 @EFapsUUID("6197af7c-2b19-40e8-8a7c-abaf0b329ac4")
 @EFapsRevision("$Rev: 1 $")
@@ -91,6 +93,7 @@ public abstract class ArchiveStructurBrowser_Base
     /**
      * Method to get a list of instances the StructurBrowser will be filled
      * with.
+     * 
      * @param _parameter as passed from eFaps API.
      * @return Return with instances
      * @throws EFapsException on error
@@ -117,9 +120,9 @@ public abstract class ArchiveStructurBrowser_Base
 
     /**
      * Method to check if an instance allows children. It is used in the tree to
-     * determine "folder" or an "item" must be rendered and if the checkForChildren
-     * method must be executed.
-     *
+     * determine "folder" or an "item" must be rendered and if the
+     * checkForChildren method must be executed.
+     * 
      * @param _parameter Parameter as passed from the eFaps API
      * @return Return with true or false
      * @throws EFapsException on error
@@ -129,7 +132,7 @@ public abstract class ArchiveStructurBrowser_Base
         final Return ret = new Return();
         final Instance inst = _parameter.getInstance();
         if (inst != null && inst.isValid()) {
-            if (!inst.getType().isKindOf(CIProducts.TreeViewProduct.getType())) {
+            if (!inst.getType().isKindOf(CIArchives.ArchiveFile.getType())) {
                 ret.put(ReturnValues.TRUE, true);
             }
         }
@@ -139,7 +142,7 @@ public abstract class ArchiveStructurBrowser_Base
     /**
      * Method to check if an instance has children. It is used in the tree to
      * determine if a "plus" to open the children must be rendered.
-     *
+     * 
      * @param _parameter Parameter as passed from the eFaps API
      * @return Return with true or false
      * @throws EFapsException on error
@@ -156,8 +159,8 @@ public abstract class ArchiveStructurBrowser_Base
     }
 
     /**
-     * @param _parameter    Parameter as passed from the eFaps API
-     * @param _check        check only?
+     * @param _parameter Parameter as passed from the eFaps API
+     * @param _check check only?
      * @return map with instances
      * @throws EFapsException on error
      */
@@ -167,19 +170,19 @@ public abstract class ArchiveStructurBrowser_Base
     {
         final Map<Instance, Boolean> ret = new LinkedHashMap<Instance, Boolean>();
         final Map<?, ?> properties = (Map<?, ?>) _parameter.get(ParameterValues.PROPERTIES);
-        final String productTypesStr = (String) properties.get("ProductTypes");
+        final String productTypesStr = (String) properties.get("ArchiveTypes");
         if (productTypesStr != null && !productTypesStr.isEmpty()) {
             final String[] productTypes = productTypesStr.split(";");
             final List<Long> typeIds = new ArrayList<Long>();
             for (final String productType : productTypes) {
                 typeIds.add(Type.get(productType).getId());
             }
-            final QueryBuilder attrQueryBldr = new QueryBuilder(CIProducts.ProductAbstract);
-            attrQueryBldr.addWhereAttrEqValue(CIProducts.ProductAbstract.Type, typeIds.toArray());
-            final AttributeQuery attrQuery = attrQueryBldr.getAttributeQuery(CIProducts.ProductAbstract.ID);
-            final QueryBuilder queryBldr = new QueryBuilder(CIProducts.TreeViewProduct);
-            queryBldr.addWhereAttrEqValue(CIProducts.TreeViewProduct.ParentLink, _parameter.getInstance().getId());
-            queryBldr.addWhereAttrInQuery(CIProducts.TreeViewProduct.ProductLink, attrQuery);
+            final QueryBuilder attrQueryBldr = new QueryBuilder(CIArchives.ArchiveFile);
+            attrQueryBldr.addWhereAttrEqValue(CIArchives.ArchiveFile.Type, typeIds.toArray());
+            final AttributeQuery attrQuery = attrQueryBldr.getAttributeQuery(CIArchives.ArchiveFile.ID);
+            final QueryBuilder queryBldr = new QueryBuilder(CIArchives.ArchiveFile);
+            queryBldr.addWhereAttrEqValue(CIArchives.ArchiveFile.ParentLink, _parameter.getInstance().getId());
+            queryBldr.addWhereAttrInQuery(CIArchives.ArchiveFile.ArchiveLink, attrQuery);
             final InstanceQuery query = queryBldr.getQuery();
             if (_check) {
                 query.setLimit(1);
@@ -190,9 +193,9 @@ public abstract class ArchiveStructurBrowser_Base
             }
 
             if (!_check || (_check && ret.isEmpty())) {
-                final QueryBuilder queryBldr2 = new QueryBuilder(CIProducts.TreeViewNode);
-                queryBldr2.addWhereAttrEqValue(CIProducts.TreeViewProduct.ParentLink, _parameter.getInstance().getId());
-                queryBldr2.addWhereAttrIsNull(CIProducts.TreeViewProduct.ProductAbstractLink);
+                final QueryBuilder queryBldr2 = new QueryBuilder(CIArchives.ArchiveNode);
+                queryBldr2.addWhereAttrEqValue(CIArchives.ArchiveNode.ParentLink, _parameter.getInstance().getId());
+                queryBldr2.addWhereAttrIsNull(CIArchives.ArchiveNode.ArchiveLink);
                 final InstanceQuery query2 = queryBldr2.getQuery();
                 query2.execute();
                 while (query2.next()) {
@@ -200,8 +203,8 @@ public abstract class ArchiveStructurBrowser_Base
                 }
             }
         } else {
-            final QueryBuilder queryBldr = new QueryBuilder(CIProducts.TreeViewNode);
-            queryBldr.addWhereAttrEqValue(CIProducts.TreeViewNode.ParentLink, _parameter.getInstance().getId());
+            final QueryBuilder queryBldr = new QueryBuilder(CIArchives.ArchiveNode);
+            queryBldr.addWhereAttrEqValue(CIArchives.ArchiveNode.ParentLink, _parameter.getInstance().getId());
             final InstanceQuery query = queryBldr.getQuery();
             if (_check) {
                 query.setLimit(1);
@@ -217,7 +220,7 @@ public abstract class ArchiveStructurBrowser_Base
     /**
      * Method to add the children to an instance. It is used to expand the
      * children of a node in the tree.
-     *
+     * 
      * @param _parameter Paraemter as passed from the eFasp API
      * @return Return with instances
      * @throws EFapsException on error
@@ -233,7 +236,7 @@ public abstract class ArchiveStructurBrowser_Base
 
     /**
      * Method to sort the values of the StructurBrowser.
-     *
+     * 
      * @param _parameter _sructurBrowser to be sorted
      * @return empty Return;
      */
@@ -255,13 +258,13 @@ public abstract class ArchiveStructurBrowser_Base
             protected String getSortString(final UIStructurBrowser _structurBrowser)
             {
                 final StringBuilder ret = new StringBuilder();
-                    try {
-                        if (_structurBrowser.getInstance() != null) {
-                            _structurBrowser.getInstance().getType();
-                        }
-                    } catch (final EFapsException e) {
-                        ArchiveStructurBrowser_Base.this.LOG.error("error during sorting", e);
+                try {
+                    if (_structurBrowser.getInstance() != null) {
+                        _structurBrowser.getInstance().getType();
                     }
+                } catch (final EFapsException e) {
+                    ArchiveStructurBrowser_Base.this.LOG.error("error during sorting", e);
+                }
                 ret.append(_structurBrowser.getLabel());
                 return ret.toString();
             }
