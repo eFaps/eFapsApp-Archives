@@ -44,7 +44,7 @@
         </field>
         <field name="description">
             <property name="SelectAlternateOID">linkto[ArchiveLink].oid</property>
-            <property name="Select">linkto[ArchiveLink].attribute[Description]</property>
+            <property name="Select">linkto[ArchiveLink].attribute[Name]</property>
             <property name="HRef">${COMMONURL}/MenuTree.jsp</property>
             <property name="Label">Archives_ArchiveTable.description.Label</property>
         </field>
