@@ -40,7 +40,7 @@
         <field name="name">
             <property name="Attribute">Name</property>
             <property name="HRef">${COMMONURL}/MenuTree.jsp</property>
-            <property name="Label">Archives_ArchiveAbstract/Label.Label</property>
+            <property name="Label">Archives_ArchiveAbstract/Name.Label</property>
         </field>
         <field name="description">
             <property name="SelectAlternateOID">linkto[ArchiveLink].oid</property>
