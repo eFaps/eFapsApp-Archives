@@ -58,10 +58,10 @@
             <sqlcolumn>COMPANYID</sqlcolumn>
         </attribute>
         <attribute>
-            <name>Label</name>
+            <name>Description</name>
             <type>String</type>
             <sqltable>Archives_ArchiveSQLTable</sqltable>
-            <sqlcolumn>LABEL</sqlcolumn>
+            <sqlcolumn>DESCRIPTION</sqlcolumn>
         </attribute>
         <attribute>
             <name>ArchiveLink</name>
