@@ -42,8 +42,9 @@
         </field>
         <field name="parentLink">
             <property name="SelectAlternateOID">linkto[ParentLink].oid</property>
-            <property name="Select">linkto[ParentLink].attribute[Label]</property>
+            <property name="Select">linkto[ParentLink].attribute[Name]</property>
             <property name="HRef">${COMMONURL}/MenuTree.jsp</property>
+            <property name="Label">Archives_ArchiveFileForm.parent.Label</property>
             <property name="ModeEdit">NONE</property>
         </field>
         <field name="upload">
@@ -76,6 +77,8 @@
         <field name="fileLength">
             <property name="Attribute">FileLength</property>
             <property name="ModeSearch">NONE</property>
+            <property name="ModeView">NONE</property>
+            <property name="ModePrint">NONE</property>
         </field>
         <field name="createGroup" character="Group">
             <property name="GroupCount">2</property>
