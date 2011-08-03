@@ -63,7 +63,6 @@
             <property name="ModeCreate">EDITABLE</property>
             <property name="ModeView">NONE</property>
             <property name="ModeEdit">NONE</property>
-            <property name="Attribute">Name</property>
             <property name="Label">Archives_ArchiveAbstract/Name.Label</property>
             <property name="Required">true</property>
         </field>
