@@ -64,6 +64,12 @@
             <sqlcolumn>NAME</sqlcolumn>
         </attribute>
         <attribute>
+            <name>Description</name>
+            <type>String</type>
+            <sqltable>Archives_ArchiveSQLTable</sqltable>
+            <sqlcolumn>DESCRIPTION</sqlcolumn>
+        </attribute>
+        <attribute>
             <name>ArchiveLink</name>
             <type>Link</type>
             <typelink>Archives_ArchiveAbstract</typelink>

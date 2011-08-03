@@ -43,10 +43,9 @@
             <property name="Label">Archives_ArchiveAbstract/Name.Label</property>
         </field>
         <field name="description">
-            <property name="SelectAlternateOID">linkto[ArchiveLink].oid</property>
-            <property name="Select">linkto[ArchiveLink].attribute[Name]</property>
-            <property name="HRef">${COMMONURL}/MenuTree.jsp</property>
-            <property name="Label">Archives_ArchiveTable.description.Label</property>
+            <property name="Attribute">Description</property>
+            <property name="ModeView">READONLY</property>
+            <property name="ModePrint">READONLY</property>
         </field>
     </definition>
 </ui-table>

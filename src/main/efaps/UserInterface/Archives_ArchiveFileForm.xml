@@ -32,14 +32,6 @@
     <definition>
         <version-expression>(version==latest)</version-expression>
         <name>Archives_ArchiveFileForm</name>
-        <field name="name">
-            <property name="Columns">40</property>
-            <property name="ModeCreate">EDITABLE</property>
-            <property name="ModeEdit">EDITABLE</property>
-            <property name="ModeSearch">EDITABLE</property>
-            <property name="Attribute">Name</property>
-            <property name="Required">true</property>
-        </field>
         <field name="parentLink">
             <property name="SelectAlternateOID">linkto[ParentLink].oid</property>
             <property name="Select">linkto[ParentLink].attribute[Name]</property>
@@ -57,15 +49,26 @@
                     event="UI_FIELD_VALUE"
                     program="org.efaps.esjp.common.file.FileField"
                     method="getFieldValueUI">
-                <property name="FileNameField">name4Create</property>
+                <property name="FileNameField">name</property>
             </trigger>
         </field>
-        <field name="name4Create">
+        <field name="name">
             <property name="ModeCreate">EDITABLE</property>
             <property name="ModeView">NONE</property>
             <property name="ModeEdit">NONE</property>
+            <property name="Attribute">Name</property>
             <property name="Label">Archives_ArchiveAbstract/Name.Label</property>
             <property name="Required">true</property>
+        </field>
+        <field name="description">
+            <property name="Columns">40</property>
+            <property name="ModeCreate">EDITABLE</property>
+            <property name="ModeEdit">EDITABLE</property>
+            <property name="ModeSearch">EDITABLE</property>
+            <property name="ModeView">READONLY</property>
+            <property name="ModePrint">READONLY</property>
+            <property name="Attribute">Description</property>
+            <property name="Label">Archives_ArchiveFileForm.description.Label</property>
         </field>
         <field name="fileGroup" character="Group">
             <property name="GroupCount">2</property>
