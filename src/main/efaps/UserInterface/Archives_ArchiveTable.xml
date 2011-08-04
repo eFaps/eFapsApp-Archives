@@ -46,6 +46,16 @@
             <property name="Attribute">Description</property>
             <property name="ModeView">READONLY</property>
             <property name="ModePrint">READONLY</property>
+            <property name="Label">Archives_ArchiveAbstract/Description.Label</property>
+
+        </field>
+        <field name="checkout">
+            <icon>Action_View</icon>
+            <property name="Attribute">OID</property>
+            <property name="HRef">${ROOTURL}/servlet/checkout</property>
+            <property name="Target">popup</property>
+            <property name="SortAble">false</property>
+            <property name="Width">30px</property>
         </field>
     </definition>
 </ui-table>
