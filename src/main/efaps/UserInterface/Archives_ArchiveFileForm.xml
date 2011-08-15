@@ -70,6 +70,11 @@
             <property name="Attribute">Description</property>
             <property name="Label">Archives_ArchiveFileForm.description.Label</property>
         </field>
+        <field name="date">
+            <property name="ModeEdit">EDITABLE</property>
+            <property name="Attribute">Date</property>
+            <property name="Columns">12</property>
+        </field>
         <field name="fileGroup" character="Group">
             <property name="ModeCreate">READONLY</property>
             <property name="GroupCount">1</property>

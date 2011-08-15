@@ -70,6 +70,12 @@
             <sqlcolumn>DESCRIPTION</sqlcolumn>
         </attribute>
         <attribute>
+            <name>Date</name>
+            <type>Date</type>
+            <sqltable>Archives_ArchiveSQLTable</sqltable>
+            <sqlcolumn>DATE</sqlcolumn>
+        </attribute>
+        <attribute>
             <name>ArchiveLink</name>
             <type>Link</type>
             <typelink>Archives_ArchiveAbstract</typelink>

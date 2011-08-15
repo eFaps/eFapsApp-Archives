@@ -42,6 +42,7 @@
             <column name="COMPANYID"       type="INTEGER"      not-null="true" />
             <column name="PARENTID"        type="INTEGER" />
             <column name="NAME"            type="STRING_SHORT" not-null="true" length="256" />
+            <column name="DATE"            type="DATETIME" />
             <column name="ARCHIVEID"       type="INTEGER" />
             <column name="FILELENGTH"      type="INTEGER" />
             <column name="FILENAME"        type="STRING_SHORT"                 length="128" />
