@@ -38,7 +38,9 @@ import org.efaps.admin.program.esjp.EFapsUUID;
 import org.efaps.db.AttributeQuery;
 import org.efaps.db.Instance;
 import org.efaps.db.InstanceQuery;
+import org.efaps.db.MultiPrintQuery;
 import org.efaps.db.QueryBuilder;
+import org.efaps.db.SelectBuilder;
 import org.efaps.esjp.ci.CIArchives;
 import org.efaps.ui.wicket.models.objects.UIStructurBrowser;
 import org.efaps.ui.wicket.models.objects.UIStructurBrowser.ExecutionStatus;
@@ -108,6 +110,20 @@ public abstract class ArchiveStructurBrowser_Base
         final String[] types = typesStr.split(";");
         for (final String type : types) {
             final QueryBuilder queryBldr = new QueryBuilder(Type.get(type));
+            final boolean checked = "true".equals(properties.get("checkStructure")) ? true : false;
+            if (checked) {
+                final String type2Structure = (String) properties.get("Type2Structure");
+                final QueryBuilder queryBldr2 = new QueryBuilder(Type.get(type2Structure));
+                queryBldr2.addWhereAttrEqValue("FromLink", _parameter.getInstance().getId());
+                final MultiPrintQuery multi = queryBldr2.getPrint();
+                final SelectBuilder selID = new SelectBuilder().linkto("ToLink").attribute("ID");
+                multi.addSelect(selID);
+                multi.execute();
+                while (multi.next()) {
+                    queryBldr.addWhereAttrEqValue("ID", multi.<Long>getSelect(selID));
+                }
+                queryBldr.setOr(true);
+            }
             final InstanceQuery query = queryBldr.getQuery();
             query.execute();
             while (query.next()) {

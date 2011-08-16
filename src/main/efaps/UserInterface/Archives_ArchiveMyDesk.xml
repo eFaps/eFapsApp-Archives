@@ -42,6 +42,7 @@
             <table>Archives_ArchiveTable</table>
             <evaluate program="org.efaps.esjp.archives.ArchiveStructurBrowser">
                 <property name="Types">Archives_ArchiveRoot</property>
+                <property name="checkStructure">false</property>
             </evaluate>
         </target>
 
