@@ -33,12 +33,13 @@ import org.efaps.db.Insert;
 import org.efaps.db.Instance;
 import org.efaps.db.MultiPrintQuery;
 import org.efaps.db.QueryBuilder;
+import org.efaps.esjp.ci.CIArchives;
 import org.efaps.esjp.common.uiform.Create;
 import org.efaps.util.EFapsException;
 
 /**
  * TODO description!
- * 
+ *
  * @author The eFasp Team
  * @version $Id: TreeViewStructurBrowser_Base.java 5979 2010-12-23 03:37:33Z
  *          jan@moxter.net $
@@ -47,6 +48,13 @@ import org.efaps.util.EFapsException;
 @EFapsRevision("$Rev$")
 public abstract class Archive_Base
 {
+    /**
+     * Create a new Archive.
+     *
+     * @param _parameter    Parameter as passed by the eFaps API
+     * @return new Return
+     * @throws EFapsException on error
+     */
     public Return create(final Parameter _parameter)
         throws EFapsException
     {
@@ -59,10 +67,10 @@ public abstract class Archive_Base
                 final Type type = Type.get(Long.parseLong(_parameter.getParameterValue("type")));
 
                 final Insert insert = new Insert(type);
-                insert.add("Name", _parameter.getParameterValue("name"));
-                insert.add("ParentLink", _parameter.getInstance().getId());
-                insert.add("Description", _parameter.getParameterValue("description"));
-                insert.add("Date", _parameter.getParameterValue("date"));
+                insert.add(CIArchives.ArchiveNode.Name, _parameter.getParameterValue("name"));
+                insert.add(CIArchives.ArchiveNode.ParentLink, _parameter.getInstance().getId());
+                insert.add(CIArchives.ArchiveNode.Description, _parameter.getParameterValue("description"));
+                insert.add(CIArchives.ArchiveNode.Date, _parameter.getParameterValue("date"));
                 insert.execute();
                 return insert.getInstance();
             }
@@ -70,21 +78,18 @@ public abstract class Archive_Base
         return create.execute(_parameter);
     }
 
+    /**
+     * Create a Root Folder.
+     * @param _parameter    Parameter as passed by the eFaps API
+     * @return new Return
+     * @throws EFapsException on error
+     */
     public Return createRoot(final Parameter _parameter)
         throws EFapsException
     {
-        final Instance instance = new Create().basicInsert(_parameter);
-        final Map<?, ?> properties = (Map<?, ?>) _parameter.get(ParameterValues.PROPERTIES);
-        final String type = (String) properties.get("Type");
-        if (type != null && !type.isEmpty()) {
-            if (instance.isValid()) {
-                final Insert insert = new Insert(Type.get(type));
-                insert.add("FromLink", _parameter.getInstance().getId());
-                insert.add("ToLink", instance.getId());
-                insert.execute();
-            }
-        }
-
+        final Create create = new Create();
+        final Instance instance = create.basicInsert(_parameter);
+        create.connect(_parameter, instance);
         return new Return();
     }
 
