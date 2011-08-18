@@ -31,7 +31,7 @@
     <file-revision>$Rev$</file-revision>
     <definition>
         <version-expression>(version==latest)</version-expression>
-        <name>Archives_FileVFSStore</name>
+        <name>Archives_FileStore</name>
         <jndi-name>eFaps/store/files</jndi-name>
         <resource class="org.efaps.db.store.VFSStoreResource" compress="GZIP">
             <property name="VFSUseTypeIdInPath">true</property>

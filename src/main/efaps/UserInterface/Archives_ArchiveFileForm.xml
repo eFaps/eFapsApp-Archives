@@ -100,14 +100,12 @@
             <property name="GroupCount">2</property>
         </field>
         <field name="fileName">
-            <property name="Attribute">FileName</property>
-            <property name="ModeSearch">EDITABLE</property>
+            <property name="Select">file.label</property>
+            <property name="Label">Archives_ArchiveFileForm.fileName.label</property>
         </field>
         <field name="fileLength">
-            <property name="Attribute">FileLength</property>
-            <property name="ModeSearch">NONE</property>
-            <property name="ModeView">NONE</property>
-            <property name="ModePrint">NONE</property>
+            <property name="Select">file.length</property>
+            <property name="Label">Archives_ArchiveFileForm.fileLength.label</property>
         </field>
         <field name="createGroup" character="Group">
             <property name="GroupCount">2</property>

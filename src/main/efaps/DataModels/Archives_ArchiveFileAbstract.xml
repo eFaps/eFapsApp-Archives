@@ -34,19 +34,6 @@
         <name>Archives_ArchiveFileAbstract</name>
         <parent>Archives_ArchiveNode</parent>
         <purpose abstract="true" />
-        <attribute>
-            <name>FileLength</name>
-            <type>Long</type>
-            <sqltable>Archives_ArchiveSQLTable</sqltable>
-            <sqlcolumn>FILELENGTH</sqlcolumn>
-        </attribute>
-        <attribute>
-            <name>FileName</name>
-            <type>String</type>
-            <sqltable>Archives_ArchiveSQLTable</sqltable>
-            <sqlcolumn>FILENAME</sqlcolumn>
-        </attribute>
-
-        <store name="Archives_FileVFSStore" attributeFileLength="FileLength" attributeFileName="FileName" />
+        <store name="Archives_FileStore"/>
     </definition>
 </datamodel-type>
