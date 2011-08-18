@@ -26,12 +26,27 @@
 <datamodel-type  xmlns="http://www.efaps.org/xsd"
                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                  xsi:schemaLocation="http://www.efaps.org/xsd http://www.efaps.org/xsd/eFaps_1.0.xsd">
-    <uuid>5080994f-5052-4d4a-b1c2-4146c1b0c21f</uuid>
+    <uuid>fe8ed814-643c-456a-a53d-e1515d2f8d22</uuid>
     <file-application>eFapsApp-Archives</file-application>
     <file-revision>$Rev$</file-revision>
     <definition>
         <version-expression>(version==latest)</version-expression>
-        <name>Archives_ArchiveFile</name>
-        <parent>Archives_ArchiveFileAbstract</parent>
+        <name>Archives_ArchiveFileAbstract</name>
+        <parent>Archives_ArchiveNode</parent>
+        <purpose abstract="true" />
+        <attribute>
+            <name>FileLength</name>
+            <type>Long</type>
+            <sqltable>Archives_ArchiveSQLTable</sqltable>
+            <sqlcolumn>FILELENGTH</sqlcolumn>
+        </attribute>
+        <attribute>
+            <name>FileName</name>
+            <type>String</type>
+            <sqltable>Archives_ArchiveSQLTable</sqltable>
+            <sqlcolumn>FILENAME</sqlcolumn>
+        </attribute>
+
+        <store name="Archives_FileVFSStore" attributeFileLength="FileLength" attributeFileName="FileName" />
     </definition>
 </datamodel-type>

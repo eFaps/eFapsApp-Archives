@@ -119,10 +119,14 @@ public abstract class ArchiveStructurBrowser_Base
                 final SelectBuilder selID = new SelectBuilder().linkto("ToLink").attribute("ID");
                 multi.addSelect(selID);
                 multi.execute();
-                while (multi.next()) {
-                    queryBldr.addWhereAttrEqValue("ID", multi.<Long>getSelect(selID));
+                if (multi.getInstanceList().size() == 0) {
+                    queryBldr.addWhereAttrEqValue("ID", Long.parseLong("0"));
+                } else {
+                    queryBldr.setOr(true);
+                    while (multi.next()) {
+                        queryBldr.addWhereAttrEqValue("ID", multi.<Long>getSelect(selID));
+                    }
                 }
-                queryBldr.setOr(true);
             }
             final InstanceQuery query = queryBldr.getQuery();
             query.execute();
