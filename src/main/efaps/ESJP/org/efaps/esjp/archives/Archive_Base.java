@@ -39,7 +39,7 @@ import org.efaps.util.EFapsException;
 
 /**
  * TODO description!
- *
+ * 
  * @author The eFasp Team
  * @version $Id: TreeViewStructurBrowser_Base.java 5979 2010-12-23 03:37:33Z
  *          jan@moxter.net $
@@ -50,8 +50,8 @@ public abstract class Archive_Base
 {
     /**
      * Create a new Archive.
-     *
-     * @param _parameter    Parameter as passed by the eFaps API
+     * 
+     * @param _parameter Parameter as passed by the eFaps API
      * @return new Return
      * @throws EFapsException on error
      */
@@ -80,7 +80,8 @@ public abstract class Archive_Base
 
     /**
      * Create a Root Folder.
-     * @param _parameter    Parameter as passed by the eFaps API
+     * 
+     * @param _parameter Parameter as passed by the eFaps API
      * @return new Return
      * @throws EFapsException on error
      */
@@ -105,7 +106,9 @@ public abstract class Archive_Base
         } else {
             if (type != null && !type.isEmpty()) {
                 final QueryBuilder queryBldr = new QueryBuilder(Type.get(type));
-                queryBldr.addWhereAttrEqValue("FromLink", _parameter.getInstance().getId());
+                if (properties.containsKey("AttributeLink")) {
+                    queryBldr.addWhereAttrEqValue((String) properties.get("AttributeLink"), _parameter.getInstance().getId());
+                }
                 final MultiPrintQuery multi = queryBldr.getPrint();
                 multi.execute();
                 if (multi.getInstanceList().size() == 0) {
