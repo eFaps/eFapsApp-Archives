@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+
+ Copyright 2003 - 2011 The eFaps Team
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+
+ Author:          The eFaps Team
+ Revision:        $Rev$
+ Last Changed:    $Date$
+ Last Changed By: $Author$
+
+-->
+
+<datamodel-type  xmlns="http://www.efaps.org/xsd"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xsi:schemaLocation="http://www.efaps.org/xsd http://www.efaps.org/xsd/eFaps_1.0.xsd">
+    <uuid>d7e560d4-fd3f-4138-b7f9-16a71028a19c</uuid>
+    <file-application>eFapsApp-Archives</file-application>
+    <file-revision>$Rev$</file-revision>
+
+    <definition>
+        <version-expression>(version==latest)</version-expression>
+        <name>Archives_ArchiveFileClass</name>
+        <purpose classification="true" abstract="true">
+            <LinkColumn>ArchiveLink</LinkColumn>
+        </purpose>
+        <attribute>
+            <name>OID</name>
+            <type>OID</type>
+            <sqltable>Archives_ArchiveFileClassSQLTable</sqltable>
+            <sqlcolumn>ID</sqlcolumn>
+        </attribute>
+        <attribute>
+            <name>ID</name>
+            <type>Long</type>
+            <sqltable>Archives_ArchiveFileClassSQLTable</sqltable>
+            <sqlcolumn>ID</sqlcolumn>
+        </attribute>
+        <attribute>
+            <name>ArchiveLink</name>
+            <type>Link</type>
+            <typelink>Archives_ArchiveFile</typelink>
+            <sqltable>Archives_ArchiveFileClassSQLTable</sqltable>
+            <sqlcolumn>ARCHIVEID</sqlcolumn>
+        </attribute>
+        <classifies type="Archives_ArchiveFile" relType="Archives_ArchiveFile2Class" relLinkAttribute="ArchiveLink"
+            relTypeAttribute="ClassTypeId" multipleSelect="true" />
+    </definition>
+</datamodel-type>
