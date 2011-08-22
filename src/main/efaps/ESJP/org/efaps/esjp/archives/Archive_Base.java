@@ -30,9 +30,11 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import org.efaps.admin.common.SystemConfiguration;
 import org.efaps.admin.datamodel.Type;
 import org.efaps.admin.event.Parameter;
 import org.efaps.admin.event.Parameter.ParameterValues;
@@ -52,7 +54,7 @@ import org.efaps.util.EFapsException;
 
 /**
  * TODO description!
- *
+ * 
  * @author The eFasp Team
  * @version $Id: TreeViewStructurBrowser_Base.java 5979 2010-12-23 03:37:33Z
  *          jan@moxter.net $
@@ -62,8 +64,30 @@ import org.efaps.util.EFapsException;
 public abstract class Archive_Base
 {
     /**
+     * access check to edit store files.
+     * 
+     * @param _parameter Parameter as passed from the eFaps API.
+     * @return ret Return.
+     * @throws EFapsException on error.
+     */
+    public Return accessCheck4EditFileName(final Parameter _parameter)
+        throws EFapsException
+    {
+        final Return ret = new Return();
+
+        // Archives_Configuration
+        final SystemConfiguration sisconf = SystemConfiguration.get(UUID.fromString("18c6c5fb-fa59-4951-8f67-fc6644dccb44"));
+
+        if (sisconf.getAttributeValueAsBoolean("ActivateEditFileName")) {
+            ret.put(ReturnValues.TRUE, true);
+        }
+
+        return ret;
+    }
+
+    /**
      * Create a new Archive.
-     *
+     * 
      * @param _parameter Parameter as passed by the eFaps API
      * @return new Return
      * @throws EFapsException on error
@@ -93,7 +117,7 @@ public abstract class Archive_Base
 
     /**
      * Create a Root Folder.
-     *
+     * 
      * @param _parameter Parameter as passed by the eFaps API
      * @return new Return
      * @throws EFapsException on error
@@ -109,7 +133,8 @@ public abstract class Archive_Base
 
     /**
      * Check if access will be granted to the cmd to create a root node.
-     * @param _parameter    Parameter as passed by the eFaps API
+     * 
+     * @param _parameter Parameter as passed by the eFaps API
      * @return new Return
      * @throws EFapsException on error
      */
@@ -138,11 +163,10 @@ public abstract class Archive_Base
         return ret;
     }
 
-
     /**
      * Check if access will be granted to the cmd to create a root node.
-     *
-     * @param _parameter    Parameter as passed by the eFaps API
+     * 
+     * @param _parameter Parameter as passed by the eFaps API
      * @return new Return
      * @throws EFapsException on error
      */
@@ -176,7 +200,7 @@ public abstract class Archive_Base
                     if (file.length() > 0) {
                         final Context.FileParameter fileTmp = new FileItem(file);
                         Context.getThreadContext().getFileParameters().put("upload", fileTmp);
-                        _parameter.getParameters().put("name", new String[]{ fileTmp.getName() });
+                        _parameter.getParameters().put("name", new String[] { fileTmp.getName() });
                         create(_parameter);
                     }
                 }
@@ -186,7 +210,6 @@ public abstract class Archive_Base
         }
         return new Return();
     }
-
 
     public class FileItem
         implements Context.FileParameter
@@ -211,7 +234,7 @@ public abstract class Archive_Base
         public void close()
             throws IOException
         {
-            //nothing must be done
+            // nothing must be done
         }
 
         /**

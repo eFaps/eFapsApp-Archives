@@ -34,6 +34,7 @@ xsi:schemaLocation="http://www.efaps.org/xsd http://www.efaps.org/xsd/eFaps_1.0.
         <!-- childs -->
         <childs>
             <child>Archives_ArchiveFileTree_Menu_Action_Edit</child>
+            <child>Archives_ArchiveFileTree_Menu_Action_EditFileName</child>
             <child>Archives_ArchiveFileCheckout</child>
         </childs>
     </definition>
