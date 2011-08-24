@@ -132,6 +132,19 @@ public abstract class Archive_Base
     }
 
     /**
+     * Edit filename.
+     * 
+     * @param _parameter Parameter as passed by the eFaps API
+     * @return new Return
+     * @throws EFapsException on error
+     */
+    public Return editFileName(final Parameter _parameter)
+        throws EFapsException
+    {
+        return new Return();
+    }
+
+    /**
      * Check if access will be granted to the cmd to create a root node.
      * 
      * @param _parameter Parameter as passed by the eFaps API
