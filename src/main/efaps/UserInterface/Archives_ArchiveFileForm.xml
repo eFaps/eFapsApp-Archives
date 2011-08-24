@@ -39,6 +39,8 @@
         </field>
         <field name="archiveOID">
             <property name="ModeCreate">HIDDEN</property>
+            <property name="ModeView">NONE</property>
+            <property name="ModeEdit">NONE</property>
             <trigger program="org.efaps.esjp.common.uiform.Field"
                 method="getStoreOIDsFieldValue"
                 name="Archives_ArchiveFileForm.archiveOID.UI_FIELD_VALUE" event="UI_FIELD_VALUE"/>
