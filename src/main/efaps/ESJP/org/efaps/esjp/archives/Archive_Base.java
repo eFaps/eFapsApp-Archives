@@ -66,7 +66,7 @@ public abstract class Archive_Base
     /**
      * access check to edit store files.
      * 
-     * @param _parameter Parameter as passed from the eFaps API.
+     * @param _parameter Parameter as passed by the eFaps API.
      * @return ret Return.
      * @throws EFapsException on error.
      */
@@ -129,6 +129,49 @@ public abstract class Archive_Base
         final Instance instance = create.basicInsert(_parameter);
         create.connect(_parameter, instance);
         return new Return();
+    }
+
+    /**
+     * Create a node.
+     * 
+     * @param _parameter Parameter as passed by the eFaps API.
+     * @return new Return.
+     * @throws EFapsException on error.
+     */
+    public Return createMultiple(final Parameter _parameter)
+        throws EFapsException
+    {
+        Return ret = new Return();
+
+        String[] oids = new String[0];
+        if (Context.getThreadContext().containsSessionAttribute("archiveOID")
+                        && Context.getThreadContext().getSessionAttribute("archiveOID") != null) {
+            oids = (String[]) Context.getThreadContext().getSessionAttribute("archiveOID");
+            Context.getThreadContext().setSessionAttribute("archiveOID", null);
+        }
+
+        if (oids.length > 0) {
+            final Instance instance = Instance.get(oids[0]);
+            if (CIArchives.ArchiveRoot.getType().isKindOf(instance.getType())
+                            || CIArchives.ArchiveNode.getType().isKindOf(instance.getType())) {
+                final Instance inst = (Instance) _parameter.get(ParameterValues.INSTANCE);
+                final Map<?, ?> properties = (Map<?, ?>) _parameter.get(ParameterValues.PROPERTIES);
+                if (inst == null || !inst.isValid()) {
+                    _parameter.put(ParameterValues.INSTANCE, instance);
+                    if (properties.containsKey("CreateFromType")) {
+                        if ("Node".equals(properties.get("CreateFromType"))) {
+                            ret = new Create().execute(_parameter);
+                        } else if ("File".equals(properties.get("CreateFromType"))) {
+                            ret = create(_parameter);
+                        } else if ("Zip".equals(properties.get("CreateFromType"))) {
+                            ret = createFromZip(_parameter);
+                        }
+                    }
+                }
+            }
+        }
+
+        return ret;
     }
 
     /**
