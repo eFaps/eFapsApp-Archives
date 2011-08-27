@@ -338,10 +338,9 @@
     * Dependencies
     ************************************************************************* -->
     <dependencies>
-        <!-- eFaps ERP Products Module -->
         <dependency>
-            <groupId>org.efaps.apps</groupId>
-            <artifactId>commons</artifactId>
+            <groupId>org.efaps</groupId>
+            <artifactId>efaps-webapp-install</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>
