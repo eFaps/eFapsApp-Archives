@@ -35,7 +35,10 @@
         <!-- target definitions -->
         <target>
             <form>Archives_ArchiveFileForm</form>
-            <execute program="org.efaps.esjp.archives.Archive" method="create"/>
+            <execute program="org.efaps.esjp.archives.Archive" method="create">
+                <property name="StatusGroup">Archives_ArchiveFileStatus</property>
+                <property name="Status">Editable</property>
+            </execute>
         </target>
 
         <!-- properties -->

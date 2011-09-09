@@ -42,24 +42,31 @@
             <property name="Phrase">$&lt;attribute[Name]&gt;$&lt;file.label&gt;</property>
             <property name="HRef">${COMMONURL}/MenuTree.jsp</property>
             <property name="Label">Archives_ArchiveAbstract/Name.Label</property>
-            <property name="Width">3</property>
+            <property name="Width">6</property>
         </field>
         <field name="description">
             <property name="Attribute">Description</property>
             <property name="ModeView">READONLY</property>
             <property name="ModePrint">READONLY</property>
             <property name="Label">Archives_ArchiveAbstract/Description.Label</property>
-            <property name="Width">2</property>
+            <property name="Width">4</property>
         </field>
          <field name="date">
             <property name="Attribute">Date</property>
             <property name="ModeView">READONLY</property>
             <property name="ModePrint">READONLY</property>
             <property name="Label">Archives_ArchiveAbstract/Date.Label</property>
-            <property name="Width">1</property>
+            <property name="Width">2</property>
             <trigger program="org.efaps.esjp.archives.Archive"
                 method="getDateFieldValue"
                 name="Archives_ArchiveTable.date.UI_FIELD_VALUE" event="UI_FIELD_VALUE"/>
+        </field>
+         <field name="status">
+            <property name="Attribute">StatusAbstract</property>
+            <property name="ModeView">READONLY</property>
+            <property name="ModePrint">READONLY</property>
+            <property name="Label">Archives_ArchiveAbstract/StatusAbstract.Label</property>
+            <property name="Width">2</property>
         </field>
         <field name="checkout">
             <icon>Action_View</icon>

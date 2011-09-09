@@ -40,7 +40,10 @@
         <!-- target definitions -->
         <target>
             <form>Archives_ArchiveRootForm</form>
-            <execute program="org.efaps.esjp.archives.Archive" method="createRoot" />
+            <execute program="org.efaps.esjp.archives.Archive" method="createRoot" >
+                <property name="StatusGroup">Archives_ArchiveNodeStatus</property>
+                <property name="Status">Editable</property>
+            </execute>
             <trigger program="org.efaps.esjp.archives.Archive" method="checkAccess2ArchiveRoot"
                 name="Archives_ArchiveMyDesk_Menu_Action_CreateRoot.UI_ACCESSCHECK" event="UI_ACCESSCHECK" >
                 <property name="activeAccessCheck">false</property>

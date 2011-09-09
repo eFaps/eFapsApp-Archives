@@ -33,5 +33,15 @@
         <version-expression>(version==latest)</version-expression>
         <name>Archives_ArchiveFile</name>
         <parent>Archives_ArchiveFileAbstract</parent>
+        <attribute>
+            <name>Status</name>
+            <type>Status</type>
+            <typelink>Archives_ArchiveFileStatus</typelink>
+            <sqltable>Archives_ArchiveSQLTable</sqltable>
+            <sqlcolumn>STATUS</sqlcolumn>
+            <trigger program="org.efaps.esjp.admin.datamodel.StatusValue"
+               name="Archives_ArchiveFile.Status.RANGE_VALUE"
+               event="RANGE_VALUE"/>
+        </attribute>
     </definition>
 </datamodel-type>

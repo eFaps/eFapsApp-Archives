@@ -35,7 +35,10 @@
         <!-- target definitions -->
         <target>
             <form>Archives_ArchiveNodeForm</form>
-            <execute program="org.efaps.esjp.common.uiform.Create" />
+            <execute program="org.efaps.esjp.common.uiform.Create" >
+                <property name="StatusGroup">Archives_ArchiveNodeStatus</property>
+                <property name="Status">Editable</property>
+            </execute>
         </target>
 
         <!-- properties -->

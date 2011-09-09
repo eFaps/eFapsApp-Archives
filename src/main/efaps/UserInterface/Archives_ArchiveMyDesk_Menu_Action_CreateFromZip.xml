@@ -42,6 +42,8 @@
             <form>Archives_ArchiveFileForm</form>
             <execute program="org.efaps.esjp.archives.Archive" method="createMultiple">
                 <property name="CreateFromType">Zip</property>
+                <property name="StatusGroup">Archives_ArchiveFileStatus</property>
+                <property name="Status">Editable</property>
             </execute>
         </target>
 

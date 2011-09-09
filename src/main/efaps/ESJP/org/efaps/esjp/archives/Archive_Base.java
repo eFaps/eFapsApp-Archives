@@ -35,6 +35,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 import org.efaps.admin.common.SystemConfiguration;
+import org.efaps.admin.datamodel.Status;
 import org.efaps.admin.datamodel.Type;
 import org.efaps.admin.event.Parameter;
 import org.efaps.admin.event.Parameter.ParameterValues;
@@ -122,6 +123,7 @@ public abstract class Archive_Base
             public Instance basicInsert(final Parameter _parameter)
                 throws EFapsException
             {
+                final Map<?, ?> props = (Map<?, ?>) _parameter.get(ParameterValues.PROPERTIES);
                 final Type type = Type.get(Long.parseLong(_parameter.getParameterValue("type")));
 
                 final Insert insert = new Insert(type);
@@ -131,6 +133,13 @@ public abstract class Archive_Base
                 insert.add(CIArchives.ArchiveNode.ParentLink, _parameter.getInstance().getId());
                 insert.add(CIArchives.ArchiveNode.Description, _parameter.getParameterValue("description"));
                 insert.add(CIArchives.ArchiveNode.Date, _parameter.getParameterValue("date"));
+                Status status = null;
+                if (props.containsKey("StatusGroup")) {
+                    status = Status.find((String) props.get("StatusGroup"), (String) props.get("Status"));
+                }
+                if (status != null) {
+                    insert.add(CIArchives.ArchiveNode.StatusAbstract, status.getId());
+                }
                 insert.execute();
                 return insert.getInstance();
             }
@@ -193,7 +202,6 @@ public abstract class Archive_Base
                 }
             }
         }
-
         return ret;
     }
 

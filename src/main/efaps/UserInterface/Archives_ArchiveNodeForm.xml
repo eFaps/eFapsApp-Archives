@@ -40,6 +40,17 @@
                 method="getStoreOIDsFieldValue"
                 name="Archives_ArchiveNodeForm.archiveOID.UI_FIELD_VALUE" event="UI_FIELD_VALUE"/>
         </field>
+        <field name="parentLink">
+            <property name="SelectAlternateOID">linkto[ParentLink].oid</property>
+            <property name="Select">linkto[ParentLink].attribute[Name]</property>
+            <property name="HRef">${COMMONURL}/MenuTree.jsp</property>
+            <property name="ModeEdit">NONE</property>
+            <property name="Label">Archives_ArchiveNodeForm.parentLink.Label</property>
+        </field>
+         <field name="status">
+            <property name="Attribute">Status</property>
+            <property name="ModeEdit">NONE</property>
+        </field>
         <field name="name">
             <property name="Columns">40</property>
             <property name="ModeCreate">EDITABLE</property>
@@ -53,12 +64,6 @@
             <property name="ModeCreate">EDITABLE</property>
             <property name="ModeEdit">EDITABLE</property>
             <property name="Attribute">Description</property>
-        </field>
-        <field name="parentLink">
-            <property name="SelectAlternateOID">linkto[ParentLink].oid</property>
-            <property name="Select">linkto[ParentLink].attribute[Name]</property>
-            <property name="HRef">${COMMONURL}/MenuTree.jsp</property>
-            <property name="ModeEdit">NONE</property>
         </field>
         <field name="createGroup" character="Group">
             <property name="GroupCount">2</property>
