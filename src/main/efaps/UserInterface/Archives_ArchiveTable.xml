@@ -51,6 +51,13 @@
             <property name="Label">Archives_ArchiveAbstract/Description.Label</property>
             <property name="Width">2</property>
         </field>
+         <field name="date">
+            <property name="Attribute">Date</property>
+            <property name="ModeView">READONLY</property>
+            <property name="ModePrint">READONLY</property>
+            <property name="Label">Archives_ArchiveAbstract/Date.Label</property>
+            <property name="Width">1</property>
+        </field>
         <field name="checkout">
             <icon>Action_View</icon>
             <property name="HRef">${ROOTURL}/servlet/checkout</property>
