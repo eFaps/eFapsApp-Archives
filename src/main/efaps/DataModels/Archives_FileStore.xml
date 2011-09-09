@@ -37,7 +37,7 @@
             <property name="VFSUseTypeIdInPath">true</property>
             <property name="VFSNumberSubDirectories">256</property>
             <property name="VFSNumberBackups">5</property>
-            <property name="VFSBaseName">file:///Users/janmoxter/Documents/workspace/eFaps/webapp/target/files</property>
+            <property name="VFSBaseName">file:///tmp/eFaps/archives</property>
             <property name="VFSProvider">org.apache.commons.vfs.provider.local.DefaultLocalFileProvider</property>
         </resource>
     </definition>

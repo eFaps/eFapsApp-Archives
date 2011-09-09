@@ -54,7 +54,7 @@ import org.efaps.util.EFapsException;
 
 /**
  * TODO description!
- * 
+ *
  * @author The eFasp Team
  * @version $Id: TreeViewStructurBrowser_Base.java 5979 2010-12-23 03:37:33Z
  *          jan@moxter.net $
@@ -65,7 +65,7 @@ public abstract class Archive_Base
 {
     /**
      * access check to edit store files.
-     * 
+     *
      * @param _parameter Parameter as passed by the eFaps API.
      * @return ret Return.
      * @throws EFapsException on error.
@@ -86,8 +86,26 @@ public abstract class Archive_Base
     }
 
     /**
+     * The Date value for the table view. On folders an empty string will be
+     * presented instead of a default value (current date).
+     *
+     * @param _parameter Parameter as passed by the eFaps API
+     * @return new Return
+     * @throws EFapsException on error
+     */
+    public Return getDateFieldValue(final Parameter _parameter)
+        throws EFapsException
+    {
+        final Return ret = new Return();
+        if (!_parameter.getInstance().getType().isKindOf(CIArchives.ArchiveFileAbstract.getType())) {
+            ret.put(ReturnValues.SNIPLETT, " ");
+        }
+        return ret;
+    }
+
+    /**
      * Create a new Archive.
-     * 
+     *
      * @param _parameter Parameter as passed by the eFaps API
      * @return new Return
      * @throws EFapsException on error
@@ -117,7 +135,7 @@ public abstract class Archive_Base
 
     /**
      * Create a Root Folder.
-     * 
+     *
      * @param _parameter Parameter as passed by the eFaps API
      * @return new Return
      * @throws EFapsException on error
@@ -133,7 +151,7 @@ public abstract class Archive_Base
 
     /**
      * Create a node.
-     * 
+     *
      * @param _parameter Parameter as passed by the eFaps API.
      * @return new Return.
      * @throws EFapsException on error.
@@ -176,7 +194,7 @@ public abstract class Archive_Base
 
     /**
      * Edit filename.
-     * 
+     *
      * @param _parameter Parameter as passed by the eFaps API
      * @return new Return
      * @throws EFapsException on error
@@ -189,7 +207,7 @@ public abstract class Archive_Base
 
     /**
      * Check if access will be granted to the cmd to create a root node.
-     * 
+     *
      * @param _parameter Parameter as passed by the eFaps API
      * @return new Return
      * @throws EFapsException on error
@@ -221,7 +239,7 @@ public abstract class Archive_Base
 
     /**
      * Check if access will be granted to the cmd to create a root node.
-     * 
+     *
      * @param _parameter Parameter as passed by the eFaps API
      * @return new Return
      * @throws EFapsException on error

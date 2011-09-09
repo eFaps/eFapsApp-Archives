@@ -57,6 +57,9 @@
             <property name="ModePrint">READONLY</property>
             <property name="Label">Archives_ArchiveAbstract/Date.Label</property>
             <property name="Width">1</property>
+            <trigger program="org.efaps.esjp.archives.Archive"
+                method="getDateFieldValue"
+                name="Archives_ArchiveTable.date.UI_FIELD_VALUE" event="UI_FIELD_VALUE"/>
         </field>
         <field name="checkout">
             <icon>Action_View</icon>
