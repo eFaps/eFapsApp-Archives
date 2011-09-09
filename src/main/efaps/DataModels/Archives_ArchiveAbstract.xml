@@ -76,13 +76,6 @@
             <sqlcolumn>DATE</sqlcolumn>
         </attribute>
         <attribute>
-            <name>ArchiveLink</name>
-            <type>Link</type>
-            <typelink>Archives_ArchiveAbstract</typelink>
-            <sqltable>Archives_ArchiveSQLTable</sqltable>
-            <sqlcolumn>ARCHIVEID</sqlcolumn>
-        </attribute>
-         <attribute>
             <name>Creator</name>
             <type>CreatorLink</type>
             <sqltable>Archives_ArchiveSQLTable</sqltable>

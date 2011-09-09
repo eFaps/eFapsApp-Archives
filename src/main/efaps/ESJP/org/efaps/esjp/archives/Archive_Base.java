@@ -42,11 +42,14 @@ import org.efaps.admin.event.Return;
 import org.efaps.admin.event.Return.ReturnValues;
 import org.efaps.admin.program.esjp.EFapsRevision;
 import org.efaps.admin.program.esjp.EFapsUUID;
+import org.efaps.ci.CIAdminCommon;
 import org.efaps.db.Context;
 import org.efaps.db.Insert;
 import org.efaps.db.Instance;
+import org.efaps.db.InstanceQuery;
 import org.efaps.db.MultiPrintQuery;
 import org.efaps.db.QueryBuilder;
+import org.efaps.db.Update;
 import org.efaps.esjp.ci.CIArchives;
 import org.efaps.esjp.common.file.FileUtil;
 import org.efaps.esjp.common.uiform.Create;
@@ -122,7 +125,9 @@ public abstract class Archive_Base
                 final Type type = Type.get(Long.parseLong(_parameter.getParameterValue("type")));
 
                 final Insert insert = new Insert(type);
-                insert.add(CIArchives.ArchiveNode.Name, _parameter.getParameterValue("name"));
+                if (!type.isKindOf(CIArchives.ArchiveFileAbstract.getType())) {
+                    insert.add(CIArchives.ArchiveNode.Name, _parameter.getParameterValue("name"));
+                }
                 insert.add(CIArchives.ArchiveNode.ParentLink, _parameter.getInstance().getId());
                 insert.add(CIArchives.ArchiveNode.Description, _parameter.getParameterValue("description"));
                 insert.add(CIArchives.ArchiveNode.Date, _parameter.getParameterValue("date"));
@@ -202,6 +207,22 @@ public abstract class Archive_Base
     public Return editFileName(final Parameter _parameter)
         throws EFapsException
     {
+        final Instance instance = _parameter.getInstance();
+        final String name = _parameter.getParameterValue("name");
+        if (name != null && !name.isEmpty()) {
+            //GeneralStoreAbstract
+            final QueryBuilder queryBuilder = new QueryBuilder(UUID.fromString("5248c84b-2724-4c46-afd3-b937959a74d7"));
+            queryBuilder.addWhereAttrEqValue(CIAdminCommon.GeneralInstance.InstanceID, instance.getId());
+            queryBuilder.addWhereAttrEqValue(CIAdminCommon.GeneralInstance.InstanceTypeID, instance.getType().getId());
+            final InstanceQuery query = queryBuilder.getQuery();
+            query.execute();
+            if (query.next()) {
+                final Instance genInst = query.getCurrentValue();
+                final Update update = new Update(genInst);
+                update.add("FileName", name);
+                update.execute();
+            }
+        }
         return new Return();
     }
 
