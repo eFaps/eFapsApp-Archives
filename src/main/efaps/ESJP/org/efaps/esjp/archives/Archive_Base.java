@@ -186,18 +186,15 @@ public abstract class Archive_Base
             final Instance instance = Instance.get(oids[0]);
             if (CIArchives.ArchiveRoot.getType().isKindOf(instance.getType())
                             || CIArchives.ArchiveNode.getType().isKindOf(instance.getType())) {
-                final Instance inst = (Instance) _parameter.get(ParameterValues.INSTANCE);
                 final Map<?, ?> properties = (Map<?, ?>) _parameter.get(ParameterValues.PROPERTIES);
-                if (inst == null || !inst.isValid()) {
-                    _parameter.put(ParameterValues.INSTANCE, instance);
-                    if (properties.containsKey("CreateFromType")) {
-                        if ("Node".equals(properties.get("CreateFromType"))) {
-                            ret = new Create().execute(_parameter);
-                        } else if ("File".equals(properties.get("CreateFromType"))) {
-                            ret = create(_parameter);
-                        } else if ("Zip".equals(properties.get("CreateFromType"))) {
-                            ret = createFromZip(_parameter);
-                        }
+                _parameter.put(ParameterValues.INSTANCE, instance);
+                if (properties.containsKey("CreateFromType")) {
+                    if ("Node".equals(properties.get("CreateFromType"))) {
+                        ret = new Create().execute(_parameter);
+                    } else if ("File".equals(properties.get("CreateFromType"))) {
+                        ret = create(_parameter);
+                    } else if ("Zip".equals(properties.get("CreateFromType"))) {
+                        ret = createFromZip(_parameter);
                     }
                 }
             }
