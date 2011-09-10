@@ -40,6 +40,7 @@
             <child>Archives_ArchiveMyDesk_Menu_Action_CreateNode</child>
             <child>Archives_ArchiveMyDesk_Menu_Action_CreateFile</child>
             <child>Archives_ArchiveMyDesk_Menu_Action_CreateFromZip</child>
+            <child>Archives_ArchiveMyDesk_Menu_Action_Move</child>
             <child>Archives_ArchiveMyDesk_Menu_Action_Delete</child>
         </childs>
     </definition>

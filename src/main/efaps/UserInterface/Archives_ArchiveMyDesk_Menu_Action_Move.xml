@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<!--
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><!--
 
  Copyright 2003 - 2011 The eFaps Team
 
@@ -21,35 +19,28 @@
  Last Changed:    $Date$
  Last Changed By: $Author$
 
--->
-
-<ui-command xmlns="http://www.efaps.org/xsd"
-            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-            xsi:schemaLocation="http://www.efaps.org/xsd http://www.efaps.org/xsd/eFaps_1.0.xsd">
-    <uuid>af7d3502-b2a6-4f23-8409-8906cf1e2f47</uuid>
+--><ui-command xmlns="http://www.efaps.org/xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.efaps.org/xsd http://www.efaps.org/xsd/eFaps_1.0.xsd">
+    <uuid>5f94565a-5414-43db-8062-2c8e1f941085</uuid>
     <file-application>eFapsApp-Archives</file-application>
     <file-revision>$Rev$</file-revision>
     <definition>
         <version-expression>(version==latest)</version-expression>
-        <name>Archives_ArchiveMyDesk</name>
+        <name>Archives_ArchiveMyDesk_Menu_Action_Move</name>
         <access>
             <role>Archives_Admin</role>
             <role>Archives_Modifier</role>
-            <role>Archives_Reader</role>
         </access>
+        <!-- target definitions -->
         <target>
-            <menu>Archives_ArchiveMyDesk_Menu</menu>
-            <table>Archives_ArchiveTable</table>
-            <evaluate program="org.efaps.esjp.archives.ArchiveStructurBrowser">
-                <property name="Types">Archives_ArchiveRoot</property>
-                <property name="Child_Types">Archives_ArchiveNode</property>
-                <property name="Child_LinkFroms">ParentLink</property>
-            </evaluate>
+            <form>Archives_ArchiveMoveForm</form>
+            <execute program="org.efaps.esjp.archives.Archive" method="move"/>
         </target>
-
         <!-- properties -->
-        <property name="Target">content</property>
-        <property name="TargetShowCheckBoxes">true</property>
-        <property name="TargetStructurBrowserField">name</property>
+        <property name="Target">modal</property>
+        <property name="TargetMode">edit</property>
+        <property name="Submit">true</property>
+        <property name="SubmitSelectedRows">0</property>
+        <property name="WindowHeight">460</property>
+        <property name="WindowWidth">515</property>
     </definition>
 </ui-command>

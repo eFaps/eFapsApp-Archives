@@ -164,6 +164,37 @@ public abstract class Archive_Base
     }
 
     /**
+     * Move files and folders to another folder.
+     *
+     * @param _parameter Parameter as passed by the eFaps API
+     * @return new Return
+     * @throws EFapsException on error
+     */
+
+    public Return move(final Parameter _parameter)
+        throws EFapsException
+    {
+        String[] oids = new String[0];
+        if (Context.getThreadContext().containsSessionAttribute("archiveOID")
+                        && Context.getThreadContext().getSessionAttribute("archiveOID") != null) {
+            oids = (String[]) Context.getThreadContext().getSessionAttribute("archiveOID");
+            Context.getThreadContext().setSessionAttribute("archiveOID", null);
+        }
+        final String sel = _parameter.getParameterValue("selectedRow");
+        if (oids.length > 0 && sel != null && !sel.isEmpty()) {
+            for (final String oid : oids) {
+                final Instance instance = Instance.get(oid);
+                if (instance.getType().isKindOf(CIArchives.ArchiveNode.getType())) {
+                    final Update update = new Update(Instance.get(oid));
+                    update.add(CIArchives.ArchiveNode.ParentLink, Instance.get(sel).getId());
+                    update.execute();
+                }
+            }
+        }
+        return new Return();
+    }
+
+    /**
      * Create a node.
      *
      * @param _parameter Parameter as passed by the eFaps API.

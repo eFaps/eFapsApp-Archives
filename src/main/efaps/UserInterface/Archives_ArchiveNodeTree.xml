@@ -38,6 +38,8 @@
             <form>Archives_ArchiveNodeForm</form>
             <evaluate program="org.efaps.esjp.archives.ArchiveStructurBrowser">
                 <property name="Types">Archives_ArchiveRoot</property>
+                <property name="Child_Types">Archives_ArchiveNode</property>
+                <property name="Child_LinkFroms">ParentLink</property>
             </evaluate>
         </target>
         <!-- type tree for -->
