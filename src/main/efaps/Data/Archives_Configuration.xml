@@ -37,5 +37,10 @@
             <value>false</value>
             <description>boolean (true/false). Activate the possibility to change file to store. </description>
         </attribute>
+        <attribute>
+            <key>ActivateVersioning</key>
+            <value>false</value>
+            <description>boolean (true/false). Activate the versioning. </description>
+        </attribute>
     </definition>
 </common-systemconfiguration>

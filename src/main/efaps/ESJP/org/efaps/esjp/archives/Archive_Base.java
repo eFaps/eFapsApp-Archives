@@ -34,7 +34,6 @@ import java.util.UUID;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import org.efaps.admin.common.SystemConfiguration;
 import org.efaps.admin.datamodel.Status;
 import org.efaps.admin.datamodel.Type;
 import org.efaps.admin.event.Parameter;
@@ -67,28 +66,6 @@ import org.efaps.util.EFapsException;
 @EFapsRevision("$Rev$")
 public abstract class Archive_Base
 {
-    /**
-     * access check to edit store files.
-     *
-     * @param _parameter Parameter as passed by the eFaps API.
-     * @return ret Return.
-     * @throws EFapsException on error.
-     */
-    public Return accessCheck4EditFileName(final Parameter _parameter)
-        throws EFapsException
-    {
-        final Return ret = new Return();
-
-        // Archives_Configuration
-        final SystemConfiguration sisconf = SystemConfiguration.get(UUID.fromString("18c6c5fb-fa59-4951-8f67-fc6644dccb44"));
-
-        if (sisconf.getAttributeValueAsBoolean("ActivateEditFileName")) {
-            ret.put(ReturnValues.TRUE, true);
-        }
-
-        return ret;
-    }
-
     /**
      * The Date value for the table view. On folders an empty string will be
      * presented instead of a default value (current date).

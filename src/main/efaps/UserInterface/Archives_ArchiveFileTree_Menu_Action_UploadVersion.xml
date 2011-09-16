@@ -35,6 +35,13 @@
         <target>
             <form>Archives_VersionUploadForm</form>
             <execute program="org.efaps.esjp.archives.Version" method="upload"/>
+            <trigger program="org.efaps.esjp.admin.access.AccessOnField"
+                method="configCheck"
+                name="Archives_ArchiveFileTree_Menu_Action_UploadVersion.UI_ACCESSCHECK"
+                event="UI_ACCESSCHECK">
+                <property name="SystemConfig">Archives_Configuration</property>
+                <property name="Attribute">ActivateVersioning</property>
+            </trigger>
         </target>
 
         <!-- properties -->
