@@ -15,31 +15,25 @@
   limitations under the License.
 
   Author:          The eFaps Team
-  Revision:        $Rev: 5372 $
-  Last Changed:    $Date: 2010-08-20 11:11:26 -0500 (Fri, 20 Aug 2010) $
-  Last Changed By: $Author: miguel.a.aranya $
+  Revision:        $Rev$
+  Last Changed:    $Date$
+  Last Changed By: $Author$
 
--->
-<ui-menu xmlns="http://www.efaps.org/xsd"
-xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-xsi:schemaLocation="http://www.efaps.org/xsd http://www.efaps.org/xsd/eFaps_1.0.xsd">
-
-    <uuid>db437ad7-1ced-4de1-8bb4-4442d4ef27bd</uuid>
+--><ui-menu xmlns="http://www.efaps.org/xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.efaps.org/xsd http://www.efaps.org/xsd/eFaps_1.0.xsd">
+    <uuid>89046fe1-b159-44b1-b2b4-7876299577fb</uuid>
     <file-application>eFapsApp-Archives</file-application>
-    <file-revision>$Rev: 5372 $</file-revision>
+    <file-revision>$Rev$</file-revision>
     <definition>
         <version-expression>(version==latest)</version-expression>
-        <name>Archives_ArchiveFileTree</name>
-        <!-- targets -->
+        <name>Archives_ArchiveFileTree_Version</name>
+        <!-- target definitions -->
         <target>
-            <menu>Archives_ArchiveFileTree_Menu</menu>
-            <form>Archives_ArchiveFileForm</form>
+            <table>Archives_VersionTable</table>
+            <evaluate program="org.efaps.esjp.common.uitable.MultiPrint">
+                <property name="Types">Archives_Version</property>
+                <property name="LinkFroms">FileLink</property>
+            </evaluate>
         </target>
-        <!-- type tree for -->
-        <type>Archives_ArchiveFile</type>
-        <childs>
-            <child>Archives_ArchiveFileTree_Version</child>
-        </childs>
         <!-- properties -->
         <property name="Target">content</property>
         <property name="TargetMode">view</property>
