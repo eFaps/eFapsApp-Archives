@@ -34,7 +34,8 @@
         <name>Archives_ArchiveFile</name>
         <parent>Archives_ArchiveFileAbstract</parent>
         <attribute>
-            <name>Status</name>
+            <!-- different name to distinguish from parent attribute, (same name leads to duplicated attribute event -->
+            <name>Status2</name>
             <type>Status</type>
             <typelink>Archives_ArchiveFileStatus</typelink>
             <sqltable>Archives_ArchiveSQLTable</sqltable>
