@@ -34,8 +34,8 @@
             <column name="FILEID"       type="INTEGER"  not-null="true"/>
             <column name="CREATOR"      type="INTEGER"  not-null="true"/>
             <column name="CREATED"      type="DATETIME" not-null="true"/>
-            <foreign key="FILEID"   name="T_ARCHIVE_FK_FILEID"  reference="T_ARCHIVE(ID)"/>
-            <foreign key="CREATOR"  name="T_ARCHIVE_FK_CRTR"    reference="T_USERPERSON(ID)"/>
+            <foreign key="FILEID"   name="T_ARCHIVEVERS_FK_FILEID"  reference="T_ARCHIVE(ID)"/>
+            <foreign key="CREATOR"  name="T_ARCHIVEVERS_FK_CRTR"    reference="T_USERPERSON(ID)"/>
         </database>
     </definition>
 </datamodel-sqltable>
