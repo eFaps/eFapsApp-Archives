@@ -44,6 +44,15 @@
         <type>Archives_ArchiveFile</type>
         <type>Archives_Version</type>
 
+        <status group="Archives_ArchiveNodeStatus">
+            <key>Editable</key>
+        </status>
+        <status group="Archives_ArchiveFileStatus">
+            <key>Editable</key>
+            <key>Locked</key>
+            <key>Closed</key>
+        </status>
+
         <role>Archives_Modifier</role>
 
     </definition>

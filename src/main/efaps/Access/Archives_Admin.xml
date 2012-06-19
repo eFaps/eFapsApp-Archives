@@ -41,11 +41,21 @@
         <access-type>statusBoost</access-type>
         <access-type>statusModify</access-type>
         <access-type>delete</access-type>
+        <access-type>grant</access-type>
 
         <type>Archives_ArchiveRoot</type>
         <type>Archives_ArchiveNode</type>
         <type>Archives_ArchiveFile</type>
         <type>Archives_Version</type>
+
+        <status group="Archives_ArchiveNodeStatus">
+            <key>Editable</key>
+        </status>
+        <status group="Archives_ArchiveFileStatus">
+            <key>Editable</key>
+            <key>Locked</key>
+            <key>Closed</key>
+        </status>
 
         <role>Archives_Admin</role>
     </definition>
