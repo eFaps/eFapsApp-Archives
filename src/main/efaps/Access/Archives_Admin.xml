@@ -42,6 +42,11 @@
         <access-type>statusModify</access-type>
         <access-type>delete</access-type>
 
+        <type>Archives_ArchiveRoot</type>
+        <type>Archives_ArchiveNode</type>
+        <type>Archives_ArchiveFile</type>
+        <type>Archives_Version</type>
+
         <role>Archives_Admin</role>
     </definition>
 </access-set>

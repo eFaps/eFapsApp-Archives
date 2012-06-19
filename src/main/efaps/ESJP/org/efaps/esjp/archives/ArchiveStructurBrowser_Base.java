@@ -113,7 +113,7 @@ public abstract class ArchiveStructurBrowser_Base
     {
         final UIStructurBrowser strBrws = (UIStructurBrowser) _parameter.get(ParameterValues.CLASS);
         for (final UIStructurBrowserTableCell cell : strBrws.getColumns()) {
-            if (strBrws.isAllowChilds() && !cell.isBrowserField() && cell.getName().equals("checkout")) {
+            if (strBrws.isAllowChildren() && !cell.isBrowserField() && cell.getName().equals("checkout")) {
                 cell.setHide(true);
             }
         }
