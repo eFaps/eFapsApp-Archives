@@ -93,6 +93,7 @@
             <property name="ModeView">NONE</property>
             <property name="ModeEdit">NONE</property>
             <property name="Attribute">Name</property>
+            <property name="ModeSearch">EDITABLE</property>
             <property name="Label">Archives_ArchiveAbstract/Name.Label</property>
             <property name="Required">true</property>
         </field>
@@ -100,7 +101,7 @@
             <property name="Columns">40</property>
             <property name="ModeCreate">EDITABLE</property>
             <property name="ModeEdit">EDITABLE</property>
-            <property name="ModeSearch">EDITABLE</property>
+            <property name="ModeSearch">NONE</property>
             <property name="ModeView">READONLY</property>
             <property name="ModePrint">READONLY</property>
             <property name="Attribute">Description</property>
