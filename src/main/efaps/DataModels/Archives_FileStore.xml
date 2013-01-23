@@ -38,7 +38,7 @@
             <property name="VFSNumberSubDirectories">256</property>
             <property name="VFSNumberBackups">5</property>
             <property name="VFSBaseName">file:///tmp/eFaps/archives</property>
-            <property name="VFSProvider">org.apache.commons.vfs.provider.local.DefaultLocalFileProvider</property>
+            <property name="VFSProvider">org.apache.commons.vfs2.provider.local.DefaultLocalFileProvider</property>
         </resource>
     </definition>
 </db-store>
