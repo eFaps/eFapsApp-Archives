@@ -32,6 +32,7 @@
     <definition>
         <version-expression>(version==latest)</version-expression>
         <name>Archives_Object2ArchiveAbstract</name>
+        <purpose abstract="true"/>
         <attribute>
             <name>Type</name>
             <type>Type</type>
