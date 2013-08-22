@@ -39,10 +39,10 @@
             <property name="TargetStructurBrowserField">name</property>
             <table>Archives_ArchiveMoveTable</table>
             <evaluate program="org.efaps.esjp.archives.ArchiveStructurBrowser">
-                <property name="Types">Archives_ArchiveRoot</property>
-                <property name="Child_Types">Archives_ArchiveNode</property>
-                <property name="Child_LinkFroms">ParentLink</property>
-                <property name="Child_ExpandChildTypes">false</property>
+                <property name="Type">Archives_ArchiveRoot</property>
+                <property name="Child_Type">Archives_ArchiveNode</property>
+                <property name="Child_LinkFrom">ParentLink</property>
+                <property name="Child_ExpandChildType">false</property>
             </evaluate>
         </field>
     </definition>
