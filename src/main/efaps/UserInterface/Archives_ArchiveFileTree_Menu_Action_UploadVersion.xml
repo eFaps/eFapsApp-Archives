@@ -40,7 +40,7 @@
                 name="Archives_ArchiveFileTree_Menu_Action_UploadVersion.UI_ACCESSCHECK"
                 event="UI_ACCESSCHECK">
                 <property name="SystemConfig">Archives_Configuration</property>
-                <property name="Attribute">ActivateVersioning</property>
+                <property name="Attribute">org.efaps.archives.ActivateVersioning</property>
             </trigger>
         </target>
 

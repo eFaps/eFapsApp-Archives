@@ -43,7 +43,7 @@ xsi:schemaLocation="http://www.efaps.org/xsd http://www.efaps.org/xsd/eFaps_1.0.
                 name="Archives_ArchiveFileTree_Menu_Action_UploadVersion.UI_ACCESSCHECK"
                 event="UI_ACCESSCHECK">
                 <property name="SystemConfig">Archives_Configuration</property>
-                <property name="Attribute">ActivateEditFileName</property>
+                <property name="Attribute">org.efaps.archives.ActivateEditFileName</property>
             </trigger>
         </target>
 
