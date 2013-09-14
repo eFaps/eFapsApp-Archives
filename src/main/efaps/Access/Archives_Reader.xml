@@ -34,6 +34,7 @@
         <name>Archives_Reader</name>
         <access-type>show</access-type>
         <access-type>read</access-type>
+        <access-type>checkout</access-type>
 
         <type>Archives_ArchiveRoot</type>
         <type>Archives_ArchiveNode</type>
