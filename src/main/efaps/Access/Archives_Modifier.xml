@@ -39,7 +39,6 @@
         <access-type>checkin</access-type>
         <access-type>create</access-type>
 
-        <type>Archives_ArchiveRoot</type>
         <type>Archives_ArchiveNode</type>
         <type>Archives_ArchiveFile</type>
         <type>Archives_Version</type>

@@ -34,7 +34,6 @@
         <name>Archives_ArchiveMyDesk_Menu_Action_CreateRoot</name>
         <access>
             <role>Archives_Admin</role>
-            <role>Archives_Modifier</role>
         </access>
 
         <!-- target definitions -->
