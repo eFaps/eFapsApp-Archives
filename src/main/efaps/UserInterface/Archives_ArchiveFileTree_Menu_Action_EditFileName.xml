@@ -30,11 +30,6 @@ xsi:schemaLocation="http://www.efaps.org/xsd http://www.efaps.org/xsd/eFaps_1.0.
     <definition>
         <version-expression>(version==latest)</version-expression>
         <name>Archives_ArchiveFileTree_Menu_Action_EditFileName</name>
-        <access>
-            <role>Archives_Admin</role>
-            <role>Archives_Modifier</role>
-        </access>
-        <!-- target definitions -->
         <target>
             <form>Archives_ArchiveFileStoreForm</form>
             <execute program="org.efaps.esjp.archives.Archive" method="editFileName" />
@@ -45,6 +40,12 @@ xsi:schemaLocation="http://www.efaps.org/xsd http://www.efaps.org/xsd/eFaps_1.0.
                 <property name="SystemConfig">Archives_Configuration</property>
                 <property name="Attribute">org.efaps.archives.ActivateEditFileName</property>
             </trigger>
+            <trigger program="org.efaps.esjp.admin.access.AccessCheck4UI"
+                method="check4InstanceAccess" 
+                name="Archives_ArchiveFileTree_Menu_Action_EditFileName.UI_ACCESSCHECK" 
+                event="UI_ACCESSCHECK">
+                <property name="AccessType">MODIFY</property>
+             </trigger>
         </target>
 
         <!-- properties -->

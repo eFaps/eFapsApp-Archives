@@ -27,11 +27,6 @@
     <definition>
         <version-expression>(version==latest)</version-expression>
         <name>Archives_ArchiveFileTree_Menu_Action_UploadVersion</name>
-        <access>
-            <role>Archives_Admin</role>
-            <role>Archives_Modifier</role>
-        </access>
-        <!-- target definitions -->
         <target>
             <form>Archives_VersionUploadForm</form>
             <execute program="org.efaps.esjp.archives.Version" method="upload"/>
@@ -42,6 +37,12 @@
                 <property name="SystemConfig">Archives_Configuration</property>
                 <property name="Attribute">org.efaps.archives.ActivateVersioning</property>
             </trigger>
+             <trigger program="org.efaps.esjp.admin.access.AccessCheck4UI"
+                method="check4InstanceAccess" 
+                name="Archives_ArchiveFileTree_Menu_Action_UploadVersion.UI_ACCESSCHECK" 
+                event="UI_ACCESSCHECK">
+                <property name="AccessType">CHECKIN</property>
+             </trigger>
         </target>
 
         <!-- properties -->

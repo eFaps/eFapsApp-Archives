@@ -32,17 +32,17 @@
     <definition>
         <version-expression>(version==latest)</version-expression>
         <name>Archives_ArchiveNodeTree_Menu_Action_Edit</name>
-        <access>
-            <role>Archives_Admin</role>
-            <role>Archives_Modifier</role>
-        </access>
-        <!-- target definitions -->
         <target>
             <form>Archives_ArchiveNodeForm</form>
             <execute program="org.efaps.esjp.common.uiform.Edit" />
+            <trigger program="org.efaps.esjp.admin.access.AccessCheck4UI"
+                method="check4InstanceAccess" 
+                name="Archives_ArchiveNodeTree_Menu_Action_Edit.UI_ACCESSCHECK" 
+                event="UI_ACCESSCHECK">
+                <property name="AccessType">MODIFY</property>
+             </trigger>
         </target>
 
-        <!-- properties -->
         <property name="Target">modal</property>
         <property name="TargetMode">edit</property>
         <property name="WindowHeight">460</property>
