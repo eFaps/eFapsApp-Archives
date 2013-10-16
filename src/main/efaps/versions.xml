@@ -50,22 +50,12 @@
             import org.efaps.db.QueryBuilder;
             import org.efaps.db.InstanceQuery;
             import org.efaps.esjp.admin.ui.UIUpdate;
-            import org.efaps.importer.DataImport;
-
+            
             EFAPS_LOGGER.info("Importing Data for eFapsApp-Archives");
 
             RunLevel.init("shell");
             RunLevel.execute();
-
-            // Admin_User_JAASKey
-            QueryBuilder queryBldr = new QueryBuilder(UUID.fromString("0e7650c6-8ec3-4c63-b377-f3eb5fb85f16"));
-            queryBldr.addWhereAttrEqValue("Key", "Archives_Admin");
-            InstanceQuery query = queryBldr.getQuery();
-            query.executeWithoutAccessCheck();
-            if (!query.next()) {
-                DataImport.readFile(new URL(EFAPS_ROOTURL, "Data/IMPORT_UserJAASKey.xml")).updateInDB();
-            }
-
+            
             <!-- Archives_MyDesk, MainToolBar -->
             UIUpdate update = new UIUpdate();
             update.add2Menu("20638332-8177-4aa7-9c46-5cd78d0c567d", "87001cc3-c45c-44de-b8f1-776df507f268", 2);
