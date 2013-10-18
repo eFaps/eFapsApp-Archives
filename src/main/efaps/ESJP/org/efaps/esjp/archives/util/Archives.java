@@ -45,7 +45,7 @@ public final class Archives
     }
 
     /**
-     * @return the SystemConfigruation for Accounting
+     * @return the SystemConfigruation for Archives
      * @throws CacheReloadException on error
      */
     public static SystemConfiguration getSysConfig()

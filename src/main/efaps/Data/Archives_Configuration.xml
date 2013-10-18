@@ -17,15 +17,16 @@
  limitations under the License.
 
  Author:          The eFaps Team
- Revision:        $Rev$
+ Revision:        $Revision$
  Last Changed:    $Date$
  Last Changed By: $Author$
 
 -->
 
 <common-systemconfiguration xmlns="http://www.efaps.org/xsd"
-                            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                            xsi:schemaLocation="http://www.efaps.org/xsd http://www.efaps.org/xsd/eFaps_1.0.xsd">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.efaps.org/xsd http://www.efaps.org/xsd/eFaps_1.0.xsd">
+    
     <uuid>18c6c5fb-fa59-4951-8f67-fc6644dccb44</uuid>
     <file-application>eFapsApp-Archives</file-application>
     <file-revision>$Rev$</file-revision>
