@@ -34,6 +34,7 @@ import java.util.UUID;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import org.efaps.admin.access.AccessSet;
 import org.efaps.admin.datamodel.Status;
 import org.efaps.admin.datamodel.Type;
 import org.efaps.admin.event.Parameter;
@@ -42,6 +43,8 @@ import org.efaps.admin.event.Return;
 import org.efaps.admin.event.Return.ReturnValues;
 import org.efaps.admin.program.esjp.EFapsRevision;
 import org.efaps.admin.program.esjp.EFapsUUID;
+import org.efaps.admin.user.Role;
+import org.efaps.ci.CIAdminAccess;
 import org.efaps.ci.CIAdminCommon;
 import org.efaps.db.Context;
 import org.efaps.db.Insert;
@@ -137,7 +140,26 @@ public abstract class Archive_Base
         final Create create = new Create();
         final Instance instance = create.basicInsert(_parameter);
         create.connect(_parameter, instance);
+        addDefaultRole(_parameter, instance);
         return new Return();
+    }
+
+    protected void addDefaultRole(final Parameter _parameter,
+                                  final Instance _instance)
+        throws EFapsException
+    {
+        final Map<?, ?> properties = (Map<?, ?>) _parameter.get(ParameterValues.PROPERTIES);
+        if (properties.containsKey("DefaultRole") && properties.containsKey("DefaultAccessSet")) {
+            final Role defaultRole = Role.get((String) properties.get("DefaultRole"));
+            final AccessSet defaultAccessSet = AccessSet.get((String) properties.get("DefaultAccessSet"));
+
+            final Insert insert = new Insert(CIAdminAccess.Access4Object);
+            insert.add(CIAdminAccess.Access4Object.TypeId, _instance.getType().getId());
+            insert.add(CIAdminAccess.Access4Object.ObjectId, _instance.getId());
+            insert.add(CIAdminAccess.Access4Object.PersonLink, defaultRole.getId());
+            insert.add(CIAdminAccess.Access4Object.AccessSetLink, defaultAccessSet.getId());
+            insert.executeWithoutAccessCheck();
+        }
     }
 
     /**
