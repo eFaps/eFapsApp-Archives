@@ -48,4 +48,9 @@ public interface ArchivesSettings
      */
     String ACTIVATE_VERSIONING = "org.efaps.archives.ActivateVersioning";
 
+    /**
+     * Definition for File Structure as properties
+     */
+    String FILE_STRUCTURE = "org.efaps.archives.FileStructure";
+
 }

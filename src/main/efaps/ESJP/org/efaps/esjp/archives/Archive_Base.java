@@ -30,6 +30,8 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Properties;
 import java.util.UUID;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -53,7 +55,10 @@ import org.efaps.db.InstanceQuery;
 import org.efaps.db.MultiPrintQuery;
 import org.efaps.db.QueryBuilder;
 import org.efaps.db.Update;
+import org.efaps.esjp.archives.util.Archives;
+import org.efaps.esjp.archives.util.ArchivesSettings;
 import org.efaps.esjp.ci.CIArchives;
+import org.efaps.esjp.common.AbstractCommon;
 import org.efaps.esjp.common.file.FileUtil;
 import org.efaps.esjp.common.uiform.Create;
 import org.efaps.util.EFapsException;
@@ -67,7 +72,7 @@ import org.efaps.util.EFapsException;
  */
 @EFapsUUID("04972bca-38fa-41f3-b160-cafdce4b51cd")
 @EFapsRevision("$Rev$")
-public abstract class Archive_Base
+public abstract class Archive_Base extends AbstractCommon
 {
     /**
      * The Date value for the table view. On folders an empty string will be
@@ -339,6 +344,65 @@ public abstract class Archive_Base
             }
         }
         return new Return();
+    }
+
+    public void createFileStructure(final Parameter _parameter,
+                                    final Instance _instance)
+        throws EFapsException
+    {
+        addSystemConfiguration(_parameter);
+        final Map<Integer, String> folders = analyseProperty(_parameter, "folder");
+        if(!folders.isEmpty()) {
+            for (final Entry<Integer, String> folder : folders.entrySet()) {
+                insertChildNode(_instance, folder.getValue());
+            }
+        }
+    }
+
+    protected void addSystemConfiguration(final Parameter _parameter)
+        throws EFapsException
+    {
+        final Properties props = Archives.getSysConfig().getAttributeValueAsProperties(ArchivesSettings.FILE_STRUCTURE);
+        _parameter.put(ParameterValues.PROPERTIES, props);
+    }
+
+    protected void insertChildNode(final Instance _parent,
+                                 final String _folder)
+        throws EFapsException
+    {
+        final Insert insert = new Insert(CIArchives.ArchiveNode);
+        insert.add(CIArchives.ArchiveNode.ParentLink, _parent);
+        insert.add(CIArchives.ArchiveRoot.Status, Status.find(CIArchives.ArchiveNodeStatus.Editable));
+        if (_folder.contains("/")) {
+            final Instance insNode;
+            final String[] tmp = _folder.split("/");
+            final InstanceQuery insQuery = getQuery4Node(_parent, tmp[0]);
+            if (insQuery.next()) {
+                insNode = insQuery.getCurrentValue();
+            } else {
+                insert.add(CIArchives.ArchiveNode.Name, tmp[0]);
+                insert.execute();
+                insNode = insert.getInstance();
+            }
+            insertChildNode(insNode, _folder.substring(_folder.indexOf("/") + 1));
+        } else {
+            if (getQuery4Node(_parent, _folder).getValues().isEmpty()) {
+                insert.add(CIArchives.ArchiveNode.Name, _folder);
+                insert.execute();
+            }
+        }
+    }
+
+    protected InstanceQuery getQuery4Node(final Instance _instance,
+                                          final String _search)
+        throws EFapsException
+    {
+        final QueryBuilder queryBldr = new QueryBuilder(CIArchives.ArchiveNode);
+        queryBldr.addWhereAttrEqValue(CIArchives.ArchiveNode.ParentLink, _instance);
+        queryBldr.addWhereAttrEqValue(CIArchives.ArchiveNode.Name, _search);
+        final InstanceQuery query = queryBldr.getQuery();
+        query.execute();
+        return query;
     }
 
     public class FileItem
