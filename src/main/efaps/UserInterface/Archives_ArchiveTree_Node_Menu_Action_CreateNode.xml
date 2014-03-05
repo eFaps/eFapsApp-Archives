@@ -32,6 +32,10 @@
     <definition>
         <version-expression>(version==latest)</version-expression>
         <name>Archives_ArchiveTree_Node_Menu_Action_CreateNode</name>
+        <access>
+            <role>Archives_Admin</role>
+            <role>Archives_Modifier</role>
+        </access>
         <!-- target definitions -->
         <target>
             <form>Archives_ArchiveNodeForm</form>
