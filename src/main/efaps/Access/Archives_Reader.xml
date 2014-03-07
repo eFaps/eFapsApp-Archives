@@ -51,7 +51,6 @@
         </status>
 
         <role>Archives_Reader</role>
-        <role>Archives_Modifier</role>
     </definition>
 
 </access-set>
