@@ -72,7 +72,8 @@ import org.efaps.util.EFapsException;
  */
 @EFapsUUID("04972bca-38fa-41f3-b160-cafdce4b51cd")
 @EFapsRevision("$Rev$")
-public abstract class Archive_Base extends AbstractCommon
+public abstract class Archive_Base
+    extends AbstractCommon
 {
     /**
      * The Date value for the table view. On folders an empty string will be
@@ -108,7 +109,6 @@ public abstract class Archive_Base extends AbstractCommon
             public Instance basicInsert(final Parameter _parameter)
                 throws EFapsException
             {
-                final Map<?, ?> props = (Map<?, ?>) _parameter.get(ParameterValues.PROPERTIES);
                 final Type type = Type.get(Long.parseLong(_parameter.getParameterValue("type")));
 
                 final Insert insert = new Insert(type);
@@ -119,8 +119,8 @@ public abstract class Archive_Base extends AbstractCommon
                 insert.add(CIArchives.ArchiveNode.Description, _parameter.getParameterValue("description"));
                 insert.add(CIArchives.ArchiveNode.Date, _parameter.getParameterValue("date"));
                 Status status = null;
-                if (props.containsKey("StatusGroup")) {
-                    status = Status.find((String) props.get("StatusGroup"), (String) props.get("Status"));
+                if (getProperty(_parameter, "StatusGroup") != null && getProperty(_parameter, "Status") != null) {
+                    status = Status.find(getProperty(_parameter, "StatusGroup"), getProperty(_parameter, "Status"));
                 }
                 if (status != null) {
                     insert.add(CIArchives.ArchiveNode.StatusAbstract, status.getId());
@@ -153,10 +153,9 @@ public abstract class Archive_Base extends AbstractCommon
                                   final Instance _instance)
         throws EFapsException
     {
-        final Map<?, ?> properties = (Map<?, ?>) _parameter.get(ParameterValues.PROPERTIES);
-        if (properties.containsKey("DefaultRole") && properties.containsKey("DefaultAccessSet")) {
-            final Role defaultRole = Role.get((String) properties.get("DefaultRole"));
-            final AccessSet defaultAccessSet = AccessSet.get((String) properties.get("DefaultAccessSet"));
+        if (getProperty(_parameter, "DefaultRole") != null && getProperty(_parameter, "DefaultAccessSet") != null) {
+            final Role defaultRole = Role.get(getProperty(_parameter, "DefaultRole"));
+            final AccessSet defaultAccessSet = AccessSet.get(getProperty(_parameter, "DefaultAccessSet"));
 
             final Insert insert = new Insert(CIAdminAccess.Access4Object);
             insert.add(CIAdminAccess.Access4Object.TypeId, _instance.getType().getId());
@@ -221,14 +220,13 @@ public abstract class Archive_Base extends AbstractCommon
             final Instance instance = Instance.get(oids[0]);
             if (CIArchives.ArchiveRoot.getType().isKindOf(instance.getType())
                             || CIArchives.ArchiveNode.getType().isKindOf(instance.getType())) {
-                final Map<?, ?> properties = (Map<?, ?>) _parameter.get(ParameterValues.PROPERTIES);
                 _parameter.put(ParameterValues.INSTANCE, instance);
-                if (properties.containsKey("CreateFromType")) {
-                    if ("Node".equals(properties.get("CreateFromType"))) {
+                if (getProperty(_parameter, "CreateFromType") != null) {
+                    if ("Node".equals(getProperty(_parameter, "CreateFromType"))) {
                         ret = new Create().execute(_parameter);
-                    } else if ("File".equals(properties.get("CreateFromType"))) {
+                    } else if ("File".equals(getProperty(_parameter, "CreateFromType"))) {
                         ret = create(_parameter);
-                    } else if ("Zip".equals(properties.get("CreateFromType"))) {
+                    } else if ("Zip".equals(getProperty(_parameter, "CreateFromType"))) {
                         ret = createFromZip(_parameter);
                     }
                 }
@@ -277,16 +275,15 @@ public abstract class Archive_Base extends AbstractCommon
         throws EFapsException
     {
         final Return ret = new Return();
-        final Map<?, ?> properties = (Map<?, ?>) _parameter.get(ParameterValues.PROPERTIES);
-        final String type = (String) properties.get("Type");
-        final boolean checked = "true".equals(properties.get("activeAccessCheck")) ? true : false;
+        final String type = getProperty(_parameter, "Type");
+        final boolean checked = "true".equalsIgnoreCase(getProperty(_parameter, "activeAccessCheck"));
         if (!checked) {
             ret.put(ReturnValues.TRUE, true);
         } else {
             if (type != null && !type.isEmpty()) {
                 final QueryBuilder queryBldr = new QueryBuilder(Type.get(type));
-                if (properties.containsKey("AttributeLink")) {
-                    queryBldr.addWhereAttrEqValue((String) properties.get("AttributeLink"), _parameter.getInstance().getId());
+                if (getProperty(_parameter, "AttributeLink") != null) {
+                    queryBldr.addWhereAttrEqValue(getProperty(_parameter, "AttributeLink"), _parameter.getInstance());
                 }
                 final MultiPrintQuery multi = queryBldr.getPrint();
                 multi.execute();
@@ -367,7 +364,7 @@ public abstract class Archive_Base extends AbstractCommon
     }
 
     protected void insertChildNode(final Instance _parent,
-                                 final String _folder)
+                                   final String _folder)
         throws EFapsException
     {
         final Insert insert = new Insert(CIArchives.ArchiveNode);
