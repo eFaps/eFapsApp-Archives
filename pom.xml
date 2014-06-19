@@ -160,5 +160,10 @@
             <artifactId>efaps-webapp-install</artifactId>
             <version>${efaps.app.dependencies}</version>
         </dependency>
+        <dependency>
+            <groupId>org.efaps.apps</groupId>
+            <artifactId>commons</artifactId>
+            <version>${efaps.app.dependencies}</version>
+        </dependency>
     </dependencies>
 </project>

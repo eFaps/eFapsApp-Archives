@@ -52,6 +52,13 @@
             <sqlcolumn>ID</sqlcolumn>
         </attribute>
         <attribute>
+            <name>ToLinkAbstract</name>
+            <type>Link</type>
+            <typelink>Archives_ArchiveAbstract</typelink>
+            <sqltable>Archives_Object2ArchiveAbstractSQLTable</sqltable>
+            <sqlcolumn>TOID</sqlcolumn>
+        </attribute>
+        <attribute>
             <name>Creator</name>
             <type>CreatorLink</type>
             <sqltable>Archives_Object2ArchiveAbstractSQLTable</sqltable>
