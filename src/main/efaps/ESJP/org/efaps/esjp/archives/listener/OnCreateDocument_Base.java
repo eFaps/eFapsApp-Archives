@@ -35,6 +35,7 @@ import org.efaps.ci.CIAdminAccess;
 import org.efaps.db.Insert;
 import org.efaps.esjp.ci.CIArchives;
 import org.efaps.esjp.common.AbstractCommon;
+import org.efaps.esjp.common.listener.ITypedClass;
 import org.efaps.esjp.erp.CommonDocument_Base.CreatedDoc;
 import org.efaps.esjp.erp.listener.IOnCreateDocument;
 import org.efaps.util.EFapsException;
@@ -50,7 +51,6 @@ import org.efaps.util.EFapsException;
 public abstract class OnCreateDocument_Base
     extends AbstractCommon
     implements IOnCreateDocument
-
 {
     /**
      * {@inheritDoc}
@@ -111,6 +111,19 @@ public abstract class OnCreateDocument_Base
             }
         }
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public CharSequence getJavaScript4Doc(final ITypedClass _typeClass,
+                                          final Parameter _parameter)
+        throws EFapsException
+    {
+        // not used in this implementation
+        return "";
+    }
+
 
     @Override
     public int getWeight()

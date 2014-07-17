@@ -40,4 +40,5 @@ import org.efaps.admin.program.esjp.EFapsUUID;
 public class OnCreateDocument
     extends OnCreateDocument_Base
 {
+
 }
