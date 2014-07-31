@@ -32,7 +32,7 @@
     <definition>
         <version-expression>(version==latest)</version-expression>
         <name>Archives_MyDesk</name>
-        <icon>Archives_ArchiveMyDesk</icon>
+        <icon>Archives_MyDeskImg</icon>
         <childs>
             <child>Archives_ArchiveMyDesk</child>
         </childs>

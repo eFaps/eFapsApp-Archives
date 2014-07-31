@@ -34,7 +34,7 @@
     <file-revision>$Rev$</file-revision>
     <definition>
         <version-expression>(version==latest)</version-expression>
-        <name>Archives_ArchiveMyDesk</name>
-        <file>Archives_ArchiveMyDesk.png</file>
+        <name>Archives_MyDeskImg</name>
+        <file>Archives_MyDeskImg.png</file>
     </definition>
 </ui-image>
