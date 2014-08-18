@@ -28,6 +28,7 @@
         <name>Archives_ArchiveMoveForm</name>
         <field name="archiveOID">
             <property name="ModeEdit">HIDDEN</property>
+            <property name="ClassNameUI">org.efaps.admin.datamodel.ui.StringUI</property>
             <trigger program="org.efaps.esjp.common.uiform.Field"
                 method="getStoreOIDsFieldValue"
                 name="Archives_ArchiveMoveForm.archiveOID.UI_FIELD_VALUE"

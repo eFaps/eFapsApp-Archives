@@ -29,6 +29,7 @@
         <field name="upload">
             <property name="ModeEdit">EDITABLE</property>
             <property name="Label">Archives_VersionUploadForm.upload.Label</property>
+             <property name="ClassNameUI">org.efaps.admin.datamodel.ui.StringUI</property>
             <trigger program="org.efaps.esjp.common.file.FileField"
                 method="getFieldValueUI"
                 name="Archives_VersionUploadForm.upload.UI_FIELD_VALUE"
@@ -41,6 +42,7 @@
             <property name="ModeEdit">EDITABLE</property>
             <property name="Label">Archives_VersionUploadForm.name.Label</property>
             <property name="Required">true</property>
+             <property name="ClassNameUI">org.efaps.admin.datamodel.ui.StringUI</property>
         </field>
     </definition>
 </ui-form>
