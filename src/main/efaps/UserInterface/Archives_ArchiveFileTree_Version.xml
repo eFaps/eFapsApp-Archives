@@ -19,7 +19,9 @@
   Last Changed:    $Date$
   Last Changed By: $Author$
 
---><ui-menu xmlns="http://www.efaps.org/xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.efaps.org/xsd http://www.efaps.org/xsd/eFaps_1.0.xsd">
+-->
+<ui-menu xmlns="http://www.efaps.org/xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.efaps.org/xsd http://www.efaps.org/xsd/eFaps_1.0.xsd">
     <uuid>89046fe1-b159-44b1-b2b4-7876299577fb</uuid>
     <file-application>eFapsApp-Archives</file-application>
     <file-revision>$Rev$</file-revision>
@@ -30,8 +32,8 @@
         <target>
             <table>Archives_VersionTable</table>
             <evaluate program="org.efaps.esjp.common.uitable.MultiPrint">
-                <property name="Types">Archives_Version</property>
-                <property name="LinkFroms">FileLink</property>
+                <property name="Type">Archives_Version</property>
+                <property name="LinkFrom">FileLink</property>
             </evaluate>
         </target>
         <!-- properties -->

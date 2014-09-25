@@ -37,8 +37,8 @@
             <menu>Archives_ArchiveTree_Node_Menu</menu>
             <table>Archives_ArchiveTable</table>
             <evaluate program="org.efaps.esjp.common.uitable.MultiPrint">
-                <property name="Types">Archives_ArchiveNode</property>
-                <property name="LinkFroms">ParentLink</property>
+                <property name="Type">Archives_ArchiveNode</property>
+                <property name="LinkFrom">ParentLink</property>
             </evaluate>
         </target>
         <!-- properties -->
