@@ -82,7 +82,12 @@ public abstract class OnCreateDocument_Base
 
             // Connect Root to Project
             final Insert insertRoot2Proj = new Insert(connectType);
-            insertRoot2Proj.add(CIArchives.Document2ArchiveAbstract.FromLinkAbstract, _createdDoc.getInstance());
+            if (containsProperty(_parameter, "Archives_ConnectParentAttribute")) {
+                insertRoot2Proj.add(getProperty(_parameter, "Archives_ConnectParentAttribute"),
+                                _createdDoc.getInstance());
+            } else {
+                insertRoot2Proj.add(CIArchives.Document2ArchiveAbstract.FromLinkAbstract, _createdDoc.getInstance());
+            }
             insertRoot2Proj.add(CIArchives.Object2ArchiveAbstract.ToLinkAbstract, insertRoot.getInstance());
             insertRoot2Proj.executeWithoutAccessCheck();
 
