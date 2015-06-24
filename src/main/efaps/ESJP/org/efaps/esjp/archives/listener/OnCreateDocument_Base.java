@@ -1,5 +1,5 @@
 /*
- * Copyright 2003 - 2014 The eFaps Team
+ * Copyright 2003 - 2015 The eFaps Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,29 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * Revision:        $Rev$
- * Last Changed:    $Date$
- * Last Changed By: $Author$
  */
 
 
 package org.efaps.esjp.archives.listener;
 
-import java.util.UUID;
+import java.util.Properties;
 
-import org.efaps.admin.access.AccessSet;
 import org.efaps.admin.datamodel.Status;
 import org.efaps.admin.datamodel.Type;
 import org.efaps.admin.dbproperty.DBProperties;
 import org.efaps.admin.event.Parameter;
-import org.efaps.admin.program.esjp.EFapsRevision;
+import org.efaps.admin.event.Parameter.ParameterValues;
+import org.efaps.admin.program.esjp.EFapsApplication;
 import org.efaps.admin.program.esjp.EFapsUUID;
-import org.efaps.admin.user.Role;
-import org.efaps.ci.CIAdminAccess;
 import org.efaps.db.Insert;
+import org.efaps.esjp.archives.Archive;
+import org.efaps.esjp.archives.util.Archives;
+import org.efaps.esjp.archives.util.ArchivesSettings;
 import org.efaps.esjp.ci.CIArchives;
 import org.efaps.esjp.common.AbstractCommon;
 import org.efaps.esjp.common.listener.ITypedClass;
+import org.efaps.esjp.common.parameter.ParameterUtil;
 import org.efaps.esjp.erp.CommonDocument_Base.CreatedDoc;
 import org.efaps.esjp.erp.listener.IOnCreateDocument;
 import org.efaps.util.EFapsException;
@@ -47,7 +46,7 @@ import org.efaps.util.EFapsException;
  * @version $Id$
  */
 @EFapsUUID("50e8ae36-1078-4c97-81be-7ec58c85b245")
-@EFapsRevision("$Rev$")
+@EFapsApplication("eFapsApp-Archives")
 public abstract class OnCreateDocument_Base
     extends AbstractCommon
     implements IOnCreateDocument
@@ -60,60 +59,38 @@ public abstract class OnCreateDocument_Base
                             final CreatedDoc _createdDoc)
         throws EFapsException
     {
-        if ("true".equalsIgnoreCase(getProperty(_parameter, "Archives_CreateRoot"))) {
+        final Parameter parameter = ParameterUtil.clone(_parameter);
+        parameter.put(ParameterValues.INSTANCE, _createdDoc.getInstance());
+
+        final Properties properties = Archives.getSysConfig().getAttributeValueAsProperties(
+                        ArchivesSettings.OBJ2ARCHCONFIG, true);
+
+        if ("true".equalsIgnoreCase(getProperty(parameter, "Archives_CreateRoot"))
+                        || properties.containsKey(_createdDoc.getInstance().getType().getName() + ".CreateRoot")) {
+
             final Insert insertRoot = new Insert(CIArchives.ArchiveRoot);
-            String nameKey = getProperty(_parameter, "Archives_RootNameDBProperty");
+            String nameKey = getProperty(parameter, "Archives_RootNameDBProperty");
             if (nameKey == null) {
                 nameKey = OnCreateDocument.class.getName() + ".DefaultRootName";
             }
-            insertRoot.add(CIArchives.ArchiveRoot.Name,
-                            DBProperties.getProperty(nameKey));
-            final Status status = Status.find(CIArchives.ArchiveNodeStatus, CIArchives.ArchiveNodeStatus.Editable);
-            insertRoot.add(CIArchives.ArchiveRoot.Status, status);
+            insertRoot.add(CIArchives.ArchiveRoot.Name, DBProperties.getProperty(nameKey));
+            insertRoot.add(CIArchives.ArchiveRoot.Status, Status.find(CIArchives.ArchiveNodeStatus.Editable));
             insertRoot.executeWithoutAccessCheck();
 
-            final String connectype = getProperty(_parameter, "Archives_ConnectType");
-            Type connectType;
-            if (isUUID(connectype)) {
-                connectType = Type.get(UUID.fromString(connectype));
-            } else {
-                connectType = Type.get(connectype);
-            }
+            final Type connectType = new Archive().getObject2ArchiveType(parameter);
 
             // Connect Root to Project
             final Insert insertRoot2Proj = new Insert(connectType);
-            if (containsProperty(_parameter, "Archives_ConnectParentAttribute")) {
-                insertRoot2Proj.add(getProperty(_parameter, "Archives_ConnectParentAttribute"),
+            if (containsProperty(parameter, "Archives_ConnectParentAttribute")) {
+                insertRoot2Proj.add(getProperty(parameter, "Archives_ConnectParentAttribute"),
                                 _createdDoc.getInstance());
             } else {
-                insertRoot2Proj.add(CIArchives.Document2ArchiveAbstract.FromLinkAbstract, _createdDoc.getInstance());
+                insertRoot2Proj.add(CIArchives.Document2ArchiveAbstract.FromLinkAbstract, parameter.getInstance());
             }
             insertRoot2Proj.add(CIArchives.Object2ArchiveAbstract.ToLinkAbstract, insertRoot.getInstance());
             insertRoot2Proj.executeWithoutAccessCheck();
 
-            if (containsProperty(_parameter, "Archives_Role")) {
-                final Role defaultRole;
-                final String roleStr = getProperty(_parameter, "Archives_Role");
-                if (isUUID(roleStr)) {
-                    defaultRole = Role.get(UUID.fromString(roleStr));
-                } else {
-                    defaultRole = Role.get(roleStr);
-                }
-                final String accessSet = getProperty(_parameter, "Archives_AccessSet");
-                final AccessSet defaultAccessSet;
-                if (isUUID(accessSet)) {
-                    defaultAccessSet = AccessSet.get(UUID.fromString(accessSet));
-                } else {
-                    defaultAccessSet = AccessSet.get(accessSet);
-                }
-
-                final Insert insert = new Insert(CIAdminAccess.Access4Object);
-                insert.add(CIAdminAccess.Access4Object.TypeId, insertRoot.getInstance().getType().getId());
-                insert.add(CIAdminAccess.Access4Object.ObjectId, insertRoot.getInstance().getId());
-                insert.add(CIAdminAccess.Access4Object.PersonLink, defaultRole.getId());
-                insert.add(CIAdminAccess.Access4Object.AccessSetLink, defaultAccessSet.getId());
-                insert.executeWithoutAccessCheck();
-            }
+            new Archive().addDefaultRole(parameter, insertRoot.getInstance());
         }
     }
 

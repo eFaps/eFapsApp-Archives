@@ -1,5 +1,5 @@
 /*
- * Copyright 2003 - 2011 The eFaps Team
+ * Copyright 2003 - 2015 The eFaps Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,7 +43,7 @@ import org.efaps.admin.event.Parameter;
 import org.efaps.admin.event.Parameter.ParameterValues;
 import org.efaps.admin.event.Return;
 import org.efaps.admin.event.Return.ReturnValues;
-import org.efaps.admin.program.esjp.EFapsRevision;
+import org.efaps.admin.program.esjp.EFapsApplication;
 import org.efaps.admin.program.esjp.EFapsUUID;
 import org.efaps.admin.user.Role;
 import org.efaps.ci.CIAdminAccess;
@@ -60,6 +60,7 @@ import org.efaps.esjp.archives.util.ArchivesSettings;
 import org.efaps.esjp.ci.CIArchives;
 import org.efaps.esjp.common.AbstractCommon;
 import org.efaps.esjp.common.file.FileUtil;
+import org.efaps.esjp.common.parameter.ParameterUtil;
 import org.efaps.esjp.common.uiform.Create;
 import org.efaps.util.EFapsException;
 
@@ -67,11 +68,9 @@ import org.efaps.util.EFapsException;
  * TODO description!
  *
  * @author The eFasp Team
- * @version $Id: TreeViewStructurBrowser_Base.java 5979 2010-12-23 03:37:33Z
- *          jan@moxter.net $
  */
 @EFapsUUID("04972bca-38fa-41f3-b160-cafdce4b51cd")
-@EFapsRevision("$Rev$")
+@EFapsApplication("eFapsApp-Archives")
 public abstract class Archive_Base
     extends AbstractCommon
 {
@@ -143,23 +142,46 @@ public abstract class Archive_Base
         throws EFapsException
     {
         final Create create = new Create();
+        if (!containsProperty(_parameter, "ConnectType") && containsProperty(_parameter, "ConnectChildAttribute")) {
+            final Type type = getObject2ArchiveType(_parameter);
+            if (type != null) {
+                ParameterUtil.setProperty(_parameter, "ConnectType", type.getName());
+            }
+        }
+
         final Instance instance = create.basicInsert(_parameter);
         create.connect(_parameter, instance);
         addDefaultRole(_parameter, instance);
         return new Return();
     }
 
-    protected void addDefaultRole(final Parameter _parameter,
-                                  final Instance _instance)
+    public void addDefaultRole(final Parameter _parameter,
+                               final Instance _rootInstance)
         throws EFapsException
     {
+        String roleStr = null;
+        String accessSetStr = null;
         if (getProperty(_parameter, "DefaultRole") != null && getProperty(_parameter, "DefaultAccessSet") != null) {
-            final Role defaultRole = Role.get(getProperty(_parameter, "DefaultRole"));
-            final AccessSet defaultAccessSet = AccessSet.get(getProperty(_parameter, "DefaultAccessSet"));
+            roleStr = getProperty(_parameter, "DefaultRole");
+            accessSetStr = getProperty(_parameter, "DefaultAccessSet");
+        } else if (getProperty(_parameter, "Archives_Role") != null
+                        && getProperty(_parameter, "Archives_AccessSet") != null) {
+            roleStr = getProperty(_parameter, "Archives_Role");
+            accessSetStr = getProperty(_parameter, "Archives_AccessSet");
+        } else {
+            final Properties properties = Archives.getSysConfig().getAttributeValueAsProperties(
+                            ArchivesSettings.OBJ2ARCHCONFIG, true);
+            roleStr = properties.getProperty(_parameter.getInstance().getType().getName() + ".DefaultRole");
+            accessSetStr = properties.getProperty(_parameter.getInstance().getType().getName() + ".DefaultAccessSet");
+        }
+        if (roleStr != null && accessSetStr != null) {
+            final Role defaultRole = isUUID(roleStr) ? Role.get(UUID.fromString(roleStr)) : Role.get(roleStr);
+            final AccessSet defaultAccessSet = isUUID(accessSetStr) ? AccessSet.get(UUID.fromString(accessSetStr))
+                            : AccessSet.get(accessSetStr);
 
             final Insert insert = new Insert(CIAdminAccess.Access4Object);
-            insert.add(CIAdminAccess.Access4Object.TypeId, _instance.getType().getId());
-            insert.add(CIAdminAccess.Access4Object.ObjectId, _instance.getId());
+            insert.add(CIAdminAccess.Access4Object.TypeId, _rootInstance.getType().getId());
+            insert.add(CIAdminAccess.Access4Object.ObjectId, _rootInstance.getId());
             insert.add(CIAdminAccess.Access4Object.PersonLink, defaultRole.getId());
             insert.add(CIAdminAccess.Access4Object.AccessSetLink, defaultAccessSet.getId());
             insert.executeWithoutAccessCheck();
@@ -275,22 +297,61 @@ public abstract class Archive_Base
         throws EFapsException
     {
         final Return ret = new Return();
-        final String type = getProperty(_parameter, "Type");
-        final boolean checked = "true".equalsIgnoreCase(getProperty(_parameter, "activeAccessCheck"));
-        if (!checked) {
-            ret.put(ReturnValues.TRUE, true);
-        } else {
-            if (type != null && !type.isEmpty()) {
-                final QueryBuilder queryBldr = new QueryBuilder(Type.get(type));
-                if (getProperty(_parameter, "AttributeLink") != null) {
-                    queryBldr.addWhereAttrEqValue(getProperty(_parameter, "AttributeLink"), _parameter.getInstance());
-                }
-                final MultiPrintQuery multi = queryBldr.getPrint();
-                multi.execute();
-                if (multi.getInstanceList().size() == 0) {
-                    ret.put(ReturnValues.TRUE, true);
-                }
+
+        final Type type = getObject2ArchiveType(_parameter);
+        if (type != null) {
+            final QueryBuilder queryBldr = new QueryBuilder(type);
+            if (getProperty(_parameter, "AttributeLink") != null) {
+                queryBldr.addWhereAttrEqValue(getProperty(_parameter, "AttributeLink"), _parameter.getInstance());
+            } else {
+                queryBldr.addWhereAttrEqValue("FromLink", _parameter.getInstance());
             }
+            final MultiPrintQuery multi = queryBldr.getPrint();
+            multi.execute();
+            if (multi.getInstanceList().size() == 0) {
+                ret.put(ReturnValues.TRUE, true);
+            }
+        }
+        return ret;
+    }
+
+    public Return checkAccess4Object2Archive(final Parameter _parameter)
+        throws EFapsException
+    {
+        final Return ret = new Return();
+        final Type type = getObject2ArchiveType(_parameter);
+        if (type != null) {
+            ret.put(ReturnValues.TRUE, true);
+        }
+        return ret;
+    }
+
+    public Type getObject2ArchiveType(final Parameter _parameter)
+        throws EFapsException
+    {
+        Type ret = null;
+        String typeStr;
+        if (containsProperty(_parameter, "Object2ArchiveType")) {
+            typeStr = getProperty(_parameter, "Object2ArchiveType");
+        } else if (containsProperty(_parameter, "Archives_ConnectType")) {
+            typeStr = getProperty(_parameter, "Archives_ConnectType");
+        } else {
+            final Properties properties = Archives.getSysConfig().getAttributeValueAsProperties(
+                            ArchivesSettings.OBJ2ARCHCONFIG, true);
+            if (_parameter.getInstance() != null
+                            && _parameter.getInstance().isValid()
+                            && properties.containsKey(_parameter.getInstance().getType().getName()
+                                            + ".Object2ArchiveType")) {
+                typeStr = properties.getProperty(_parameter.getInstance().getType().getName()
+                                + ".Object2ArchiveType");
+            }
+            else {
+                typeStr = null;
+            }
+        }
+        if (typeStr != null) {
+            ret = isUUID(typeStr) ? Type.get(UUID.fromString(typeStr))
+                            : Type.get(typeStr);
         }
         return ret;
     }
