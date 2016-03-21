@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <!--
 
-  Copyright 2003 - 2011 The eFaps Team
+  Copyright 2003 - 2016 The eFaps Team
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -16,19 +15,12 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 
-  Author:          The eFaps Team
-  Revision:        $Rev$
-  Last Changed:    $Date$
-  Last Changed By: $Author$
-
 -->
 
-<ui-form xmlns="http://www.efaps.org/xsd"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<ui-form xmlns="http://www.efaps.org/xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://www.efaps.org/xsd http://www.efaps.org/xsd/eFaps_1.0.xsd">
     <uuid>c4b4bb49-748e-4469-a1b9-46fb2f3e77e2</uuid>
     <file-application>eFapsApp-Archives</file-application>
-    <file-revision>$Rev$</file-revision>
     <definition>
         <version-expression>(version==latest)</version-expression>
         <name>Archives_ArchiveRootForm</name>
@@ -39,6 +31,10 @@
             <property name="ModeSearch">EDITABLE</property>
             <property name="Attribute">Name</property>
             <property name="Required">true</property>
+            <trigger program="org.efaps.esjp.archives.Archive"
+                method="rootNameFieldValue"
+                name="Archives_ArchiveRootForm.name.UI_FIELD_VALUE"
+                event="UI_FIELD_VALUE"/>
         </field>
         <field name="description">
             <property name="Columns">40</property>

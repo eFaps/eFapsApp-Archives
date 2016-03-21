@@ -1,5 +1,5 @@
 /*
- * Copyright 2003 - 2015 The eFaps Team
+ * Copyright 2003 - 2016 The eFaps Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,9 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * Revision:        $Rev$
- * Last Changed:    $Date$
- * Last Changed By: $Author$
  */
 
 package org.efaps.esjp.archives;
@@ -39,12 +36,14 @@ import java.util.zip.ZipInputStream;
 import org.efaps.admin.access.AccessSet;
 import org.efaps.admin.datamodel.Status;
 import org.efaps.admin.datamodel.Type;
+import org.efaps.admin.dbproperty.DBProperties;
 import org.efaps.admin.event.Parameter;
 import org.efaps.admin.event.Parameter.ParameterValues;
 import org.efaps.admin.event.Return;
 import org.efaps.admin.event.Return.ReturnValues;
 import org.efaps.admin.program.esjp.EFapsApplication;
 import org.efaps.admin.program.esjp.EFapsUUID;
+import org.efaps.admin.ui.AbstractUserInterfaceObject.TargetMode;
 import org.efaps.admin.user.Role;
 import org.efaps.ci.CIAdminAccess;
 import org.efaps.ci.CIAdminCommon;
@@ -56,7 +55,6 @@ import org.efaps.db.MultiPrintQuery;
 import org.efaps.db.QueryBuilder;
 import org.efaps.db.Update;
 import org.efaps.esjp.archives.util.Archives;
-import org.efaps.esjp.archives.util.ArchivesSettings;
 import org.efaps.esjp.ci.CIArchives;
 import org.efaps.esjp.common.AbstractCommon;
 import org.efaps.esjp.common.file.FileUtil;
@@ -114,7 +112,7 @@ public abstract class Archive_Base
                 if (!type.isKindOf(CIArchives.ArchiveFileAbstract.getType())) {
                     insert.add(CIArchives.ArchiveNode.Name, _parameter.getParameterValue("name"));
                 }
-                insert.add(CIArchives.ArchiveNode.ParentLink, _parameter.getInstance().getId());
+                insert.add(CIArchives.ArchiveNode.ParentLink, _parameter.getInstance());
                 insert.add(CIArchives.ArchiveNode.Description, _parameter.getParameterValue("description"));
                 insert.add(CIArchives.ArchiveNode.Date, _parameter.getParameterValue("date"));
                 Status status = null;
@@ -122,7 +120,7 @@ public abstract class Archive_Base
                     status = Status.find(getProperty(_parameter, "StatusGroup"), getProperty(_parameter, "Status"));
                 }
                 if (status != null) {
-                    insert.add(CIArchives.ArchiveNode.StatusAbstract, status.getId());
+                    insert.add(CIArchives.ArchiveNode.StatusAbstract, status);
                 }
                 insert.execute();
                 return insert.getInstance();
@@ -151,28 +149,66 @@ public abstract class Archive_Base
 
         final Instance instance = create.basicInsert(_parameter);
         create.connect(_parameter, instance);
-        addDefaultRole(_parameter, instance);
+        addDefaultRole(_parameter,  _parameter.getInstance(), instance);
+        addDefaultFolders(_parameter,  _parameter.getInstance(), instance);
         return new Return();
     }
 
+    /**
+     * Root name field value.
+     *
+     * @param _parameter the _parameter
+     * @return the return
+     * @throws EFapsException the e faps exception
+     */
+    public Return rootNameFieldValue(final Parameter _parameter)
+        throws EFapsException
+    {
+        final Return ret = new Return();
+        if (TargetMode.CREATE.equals(_parameter.get(ParameterValues.ACCESSMODE))) {
+            final Properties properties = Archives.OBJ2ARCHCONFIG.get();
+            final String typeName = _parameter.getInstance().getType().getName();
+            String name = null;
+            if (properties.containsKey(typeName + ".RootName")) {
+                name = properties.getProperty(typeName + ".RootName");
+            } else if (containsProperty(_parameter, "Archives_RootNameDBProperty")) {
+                name = DBProperties.getProperty(getProperty(_parameter, "Archives_RootNameDBProperty"));
+            }
+            if (name != null) {
+                ret.put(ReturnValues.VALUES, name);
+            }
+        }
+        return ret;
+    }
+
+    /**
+     * Adds the default role.
+     *
+     * @param _parameter the _parameter
+     * @param _objectInstance the _object instance
+     * @param _rootInstance the _root instance
+     * @throws EFapsException the e faps exception
+     */
     public void addDefaultRole(final Parameter _parameter,
+                               final Instance _objectInstance,
                                final Instance _rootInstance)
         throws EFapsException
     {
         String roleStr = null;
         String accessSetStr = null;
-        if (getProperty(_parameter, "DefaultRole") != null && getProperty(_parameter, "DefaultAccessSet") != null) {
-            roleStr = getProperty(_parameter, "DefaultRole");
-            accessSetStr = getProperty(_parameter, "DefaultAccessSet");
-        } else if (getProperty(_parameter, "Archives_Role") != null
-                        && getProperty(_parameter, "Archives_AccessSet") != null) {
-            roleStr = getProperty(_parameter, "Archives_Role");
-            accessSetStr = getProperty(_parameter, "Archives_AccessSet");
-        } else {
-            final Properties properties = Archives.getSysConfig().getAttributeValueAsProperties(
-                            ArchivesSettings.OBJ2ARCHCONFIG, true);
+
+        final Properties properties = Archives.OBJ2ARCHCONFIG.get();
+        if (properties.containsKey(_parameter.getInstance().getType().getName() + ".DefaultRole")
+                        && properties.containsKey(_parameter.getInstance().getType().getName() + ".DefaultAccessSet")) {
             roleStr = properties.getProperty(_parameter.getInstance().getType().getName() + ".DefaultRole");
             accessSetStr = properties.getProperty(_parameter.getInstance().getType().getName() + ".DefaultAccessSet");
+        } else if (containsProperty(_parameter, "DefaultRole") && containsProperty(_parameter, "DefaultAccessSet")) {
+            roleStr = getProperty(_parameter, "DefaultRole");
+            accessSetStr = getProperty(_parameter, "DefaultAccessSet");
+        } else if (containsProperty(_parameter, "Archives_Role")
+                        && containsProperty(_parameter, "Archives_AccessSet")) {
+            roleStr = getProperty(_parameter, "Archives_Role");
+            accessSetStr = getProperty(_parameter, "Archives_AccessSet");
         }
         if (roleStr != null && accessSetStr != null) {
             final Role defaultRole = isUUID(roleStr) ? Role.get(UUID.fromString(roleStr)) : Role.get(roleStr);
@@ -315,6 +351,13 @@ public abstract class Archive_Base
         return ret;
     }
 
+    /**
+     * Check access4 object2 archive.
+     *
+     * @param _parameter the _parameter
+     * @return the return
+     * @throws EFapsException the e faps exception
+     */
     public Return checkAccess4Object2Archive(final Parameter _parameter)
         throws EFapsException
     {
@@ -326,32 +369,30 @@ public abstract class Archive_Base
         return ret;
     }
 
+    /**
+     * Gets the object2 archive type.
+     *
+     * @param _parameter the _parameter
+     * @return the object2 archive type
+     * @throws EFapsException the e faps exception
+     */
     public Type getObject2ArchiveType(final Parameter _parameter)
         throws EFapsException
     {
         Type ret = null;
-        String typeStr;
-        if (containsProperty(_parameter, "Object2ArchiveType")) {
+        String typeStr = null;
+        final Properties properties = Archives.OBJ2ARCHCONFIG.get();
+        if (_parameter.getInstance() != null && _parameter.getInstance().isValid()
+                        && properties.containsKey(
+                                        _parameter.getInstance().getType().getName() + ".Object2ArchiveType")) {
+            typeStr = properties.getProperty(_parameter.getInstance().getType().getName() + ".Object2ArchiveType");
+        } else if (containsProperty(_parameter, "Object2ArchiveType")) {
             typeStr = getProperty(_parameter, "Object2ArchiveType");
         } else if (containsProperty(_parameter, "Archives_ConnectType")) {
             typeStr = getProperty(_parameter, "Archives_ConnectType");
-        } else {
-            final Properties properties = Archives.getSysConfig().getAttributeValueAsProperties(
-                            ArchivesSettings.OBJ2ARCHCONFIG, true);
-            if (_parameter.getInstance() != null
-                            && _parameter.getInstance().isValid()
-                            && properties.containsKey(_parameter.getInstance().getType().getName()
-                                            + ".Object2ArchiveType")) {
-                typeStr = properties.getProperty(_parameter.getInstance().getType().getName()
-                                + ".Object2ArchiveType");
-            }
-            else {
-                typeStr = null;
-            }
         }
         if (typeStr != null) {
-            ret = isUUID(typeStr) ? Type.get(UUID.fromString(typeStr))
-                            : Type.get(typeStr);
+            ret = isUUID(typeStr) ? Type.get(UUID.fromString(typeStr)) : Type.get(typeStr);
         }
         return ret;
     }
@@ -404,65 +445,77 @@ public abstract class Archive_Base
         return new Return();
     }
 
-    public void createFileStructure(final Parameter _parameter,
-                                    final Instance _instance)
-        throws EFapsException
+    /**
+     * Creates the file structure.
+     *
+     * @param _parameter the _parameter
+     * @param _objectInstance the _object instance
+     * @param _rootFolderInstance the _root folder instance
+     * @throws EFapsException the e faps exception
+     */
+    public void addDefaultFolders(final Parameter _parameter,
+                                  final Instance _objectInstance,
+                                  final Instance _rootFolderInstance)
+                                      throws EFapsException
     {
-        addSystemConfiguration(_parameter);
-        final Map<Integer, String> folders = analyseProperty(_parameter, "folder");
-        if(!folders.isEmpty()) {
+        final Properties properties = Archives.OBJ2ARCHCONFIG.get();
+        final Map<Integer, String> folders = analyseProperty(_parameter, properties,
+                        _objectInstance.getType().getName() + ".Folder");
+        if (folders.isEmpty()) {
+            folders.putAll(analyseProperty(_parameter, "Archives_Folder"));
+        }
+        if (!folders.isEmpty()) {
             for (final Entry<Integer, String> folder : folders.entrySet()) {
-                insertChildNode(_instance, folder.getValue());
+                insertChildNode(_rootFolderInstance, folder.getValue());
             }
         }
     }
 
-    protected void addSystemConfiguration(final Parameter _parameter)
+    /**
+     * Insert child node.
+     *
+     * @param _parentNodeInstance the _parent node instance
+     * @param _folderDefinition the _folder definition
+     * @throws EFapsException the eFaps exception
+     */
+    protected void insertChildNode(final Instance _parentNodeInstance,
+                                   final String _folderDefinition)
         throws EFapsException
     {
-        final Properties props = Archives.getSysConfig().getAttributeValueAsProperties(ArchivesSettings.FILE_STRUCTURE);
-        _parameter.put(ParameterValues.PROPERTIES, props);
-    }
-
-    protected void insertChildNode(final Instance _parent,
-                                   final String _folder)
-        throws EFapsException
-    {
-        final Insert insert = new Insert(CIArchives.ArchiveNode);
-        insert.add(CIArchives.ArchiveNode.ParentLink, _parent);
-        insert.add(CIArchives.ArchiveRoot.Status, Status.find(CIArchives.ArchiveNodeStatus.Editable));
-        if (_folder.contains("/")) {
-            final Instance insNode;
-            final String[] tmp = _folder.split("/");
-            final InstanceQuery insQuery = getQuery4Node(_parent, tmp[0]);
-            if (insQuery.next()) {
-                insNode = insQuery.getCurrentValue();
-            } else {
-                insert.add(CIArchives.ArchiveNode.Name, tmp[0]);
-                insert.execute();
-                insNode = insert.getInstance();
-            }
-            insertChildNode(insNode, _folder.substring(_folder.indexOf("/") + 1));
+        String folderName;
+        String subFolderDef;
+        if (_folderDefinition.contains("/")) {
+            final String[] tmp = _folderDefinition.split("/");
+            folderName = tmp[0];
+            subFolderDef = _folderDefinition.substring(_folderDefinition.indexOf("/") + 1);
         } else {
-            if (getQuery4Node(_parent, _folder).getValues().isEmpty()) {
-                insert.add(CIArchives.ArchiveNode.Name, _folder);
-                insert.execute();
-            }
+            folderName = _folderDefinition;
+            subFolderDef = null;
         }
-    }
-
-    protected InstanceQuery getQuery4Node(final Instance _instance,
-                                          final String _search)
-        throws EFapsException
-    {
         final QueryBuilder queryBldr = new QueryBuilder(CIArchives.ArchiveNode);
-        queryBldr.addWhereAttrEqValue(CIArchives.ArchiveNode.ParentLink, _instance);
-        queryBldr.addWhereAttrEqValue(CIArchives.ArchiveNode.Name, _search);
+        queryBldr.addWhereAttrEqValue(CIArchives.ArchiveNode.ParentLink, _parentNodeInstance);
+        queryBldr.addWhereAttrEqValue(CIArchives.ArchiveNode.Name, folderName);
         final InstanceQuery query = queryBldr.getQuery();
         query.execute();
-        return query;
+        final Instance childInstance;
+        if (query.next()) {
+            childInstance = query.getCurrentValue();
+        } else {
+            final Insert insert = new Insert(CIArchives.ArchiveNode);
+            insert.add(CIArchives.ArchiveNode.ParentLink, _parentNodeInstance);
+            insert.add(CIArchives.ArchiveRoot.Status, Status.find(CIArchives.ArchiveNodeStatus.Editable));
+            insert.add(CIArchives.ArchiveNode.Name, folderName);
+            insert.execute();
+            childInstance = insert.getInstance();
+        }
+        if (subFolderDef != null) {
+            insertChildNode(childInstance, subFolderDef);
+        }
     }
 
+    /**
+     * The Class FileItem.
+     */
     public class FileItem
         implements Context.FileParameter
     {
@@ -472,7 +525,9 @@ public abstract class Archive_Base
         private final File file;
 
         /**
-         * @param _file
+         * Instantiates a new file item.
+         *
+         * @param _file the _file
          */
         public FileItem(final File _file)
         {

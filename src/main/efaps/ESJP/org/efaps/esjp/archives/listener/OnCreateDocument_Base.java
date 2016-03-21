@@ -30,7 +30,6 @@ import org.efaps.admin.program.esjp.EFapsUUID;
 import org.efaps.db.Insert;
 import org.efaps.esjp.archives.Archive;
 import org.efaps.esjp.archives.util.Archives;
-import org.efaps.esjp.archives.util.ArchivesSettings;
 import org.efaps.esjp.ci.CIArchives;
 import org.efaps.esjp.common.AbstractCommon;
 import org.efaps.esjp.common.listener.ITypedClass;
@@ -62,18 +61,23 @@ public abstract class OnCreateDocument_Base
         final Parameter parameter = ParameterUtil.clone(_parameter);
         parameter.put(ParameterValues.INSTANCE, _createdDoc.getInstance());
 
-        final Properties properties = Archives.getSysConfig().getAttributeValueAsProperties(
-                        ArchivesSettings.OBJ2ARCHCONFIG, true);
+        final String typeName = _createdDoc.getInstance().getType().getName();
+        final Properties properties = Archives.OBJ2ARCHCONFIG.get();
 
-        if ("true".equalsIgnoreCase(getProperty(parameter, "Archives_CreateRoot"))
-                        || properties.containsKey(_createdDoc.getInstance().getType().getName() + ".CreateRoot")) {
+        // if one of them has the config
+        if (properties.containsKey(typeName + ".CreateRoot")
+                        || "true".equalsIgnoreCase(getProperty(parameter, "Archives_CreateRoot"))) {
 
             final Insert insertRoot = new Insert(CIArchives.ArchiveRoot);
-            String nameKey = getProperty(parameter, "Archives_RootNameDBProperty");
-            if (nameKey == null) {
-                nameKey = OnCreateDocument.class.getName() + ".DefaultRootName";
+            final String name;
+            if (properties.containsKey(typeName + ".RootName")) {
+                name = properties.getProperty(typeName + ".RootName");
+            } else if (containsProperty(_parameter, "Archives_RootNameDBProperty")) {
+                name = DBProperties.getProperty(getProperty(_parameter, "Archives_RootNameDBProperty"));
+            } else {
+                name = DBProperties.getProperty(OnCreateDocument.class.getName() + ".DefaultRootName");
             }
-            insertRoot.add(CIArchives.ArchiveRoot.Name, DBProperties.getProperty(nameKey));
+            insertRoot.add(CIArchives.ArchiveRoot.Name, name);
             insertRoot.add(CIArchives.ArchiveRoot.Status, Status.find(CIArchives.ArchiveNodeStatus.Editable));
             insertRoot.executeWithoutAccessCheck();
 
@@ -90,7 +94,8 @@ public abstract class OnCreateDocument_Base
             insertRoot2Proj.add(CIArchives.Object2ArchiveAbstract.ToLinkAbstract, insertRoot.getInstance());
             insertRoot2Proj.executeWithoutAccessCheck();
 
-            new Archive().addDefaultRole(parameter, insertRoot.getInstance());
+            new Archive().addDefaultRole(parameter, _createdDoc.getInstance(), insertRoot.getInstance());
+            new Archive().addDefaultFolders(_parameter, _createdDoc.getInstance(), insertRoot.getInstance());
         }
     }
 
