@@ -30,7 +30,7 @@ import org.efaps.db.QueryBuilder;
 import org.efaps.db.SelectBuilder;
 import org.efaps.esjp.ci.CIArchives;
 import org.efaps.esjp.ui.structurbrowser.StandartStructurBrowser;
-import org.efaps.ui.wicket.models.cell.UIStructurBrowserTableCell;
+import org.efaps.ui.wicket.models.field.AbstractUIField;
 import org.efaps.ui.wicket.models.objects.UIStructurBrowser;
 import org.efaps.util.EFapsException;
 
@@ -103,9 +103,10 @@ public abstract class ArchiveStructurBrowser_Base
         throws EFapsException
     {
         final UIStructurBrowser strBrws = (UIStructurBrowser) _parameter.get(ParameterValues.CLASS);
-        for (final UIStructurBrowserTableCell cell : strBrws.getColumns()) {
-            if (strBrws.isAllowChildren() && !cell.isBrowserField() && cell.getName().equals("checkout")) {
-                cell.setHide(true);
+        for (final AbstractUIField uiField : strBrws.getColumns()) {
+            if (strBrws.isAllowChildren() && !strBrws.isBrowserField(uiField)
+                            && uiField.getFieldConfiguration().getName().equals("checkout")) {
+                uiField.setHide(true);
             }
         }
         return new Return();
