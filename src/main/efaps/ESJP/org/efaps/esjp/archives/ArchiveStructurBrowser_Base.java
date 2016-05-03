@@ -73,6 +73,10 @@ public abstract class ArchiveStructurBrowser_Base
                     _queryBldr.addWhereAttrEqValue("ID", multi.getSelect(selID));
                 }
             }
+        } else {
+            final QueryBuilder queryBldr = new QueryBuilder(CIArchives.Object2ArchiveAbstract);
+            _queryBldr.addWhereAttrNotInQuery(CIArchives.ArchiveAbstract.ID,
+                            queryBldr.getAttributeQuery(CIArchives.Object2ArchiveAbstract.ToLinkAbstract));
         }
     }
 
