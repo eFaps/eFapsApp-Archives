@@ -62,15 +62,15 @@ public abstract class ArchiveStructurBrowser_Base
             final QueryBuilder queryBldr = new QueryBuilder(type);
             queryBldr.addWhereAttrEqValue("FromLink", _parameter.getInstance());
             final MultiPrintQuery multi = queryBldr.getPrint();
-            final SelectBuilder selID = new SelectBuilder().linkto("ToLink").instance();
-            multi.addSelect(selID);
+            final SelectBuilder selInst = new SelectBuilder().linkto("ToLink").instance();
+            multi.addSelect(selInst);
             multi.execute();
             if (multi.getInstanceList().size() == 0) {
                 _queryBldr.addWhereAttrEqValue("ID", Long.parseLong("0"));
             } else {
                 _queryBldr.setOr(true);
                 while (multi.next()) {
-                    _queryBldr.addWhereAttrEqValue("ID", multi.getSelect(selID));
+                    _queryBldr.addWhereAttrEqValue("ID", multi.<Instance>getSelect(selInst));
                 }
             }
         } else {
