@@ -23,6 +23,8 @@
         <name>Archives_DocumentTree_File_Menu_Action</name>
         <childs>
             <child>Archives_DocumentTree_File_Menu_Action_CreateRoot</child>
+            <child>Archives_DocumentTree_File_Menu_Action_CreateFile</child>
+            <child>Archives_DocumentTree_File_Menu_Action_CreateNode</child>
         </childs>
     </definition>
 </ui-menu>

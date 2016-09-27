@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<!--
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><!--
 
  Copyright 2003 - 2016 The eFaps Team
 
@@ -17,25 +15,29 @@
  limitations under the License.
 
 -->
-
 <ui-command xmlns="http://www.efaps.org/xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.efaps.org/xsd http://www.efaps.org/xsd/eFaps_1.0.xsd">
-    <uuid>0a63ba1e-f5da-4b75-bbc3-639e8bb80860</uuid>
+    <uuid>b60fc413-787b-42af-98b3-60d2ce862e4f</uuid>
     <file-application>eFapsApp-Archives</file-application>
     <definition>
         <version-expression>(version==latest)</version-expression>
-        <name>Archives_ArchiveMyDesk_Menu_Action_CreateFile</name>
+        <name>Archives_DocumentTree_File_Menu_Action_CreateFile</name>
         <access>
             <role>Archives_Admin</role>
             <role>Archives_Modifier</role>
         </access>
         <target>
             <form>Archives_ArchiveFileForm</form>
-            <execute program="org.efaps.esjp.archives.Archive" method="createMultiple">
+            <execute method="createMultiple" program="org.efaps.esjp.archives.Archive">
                 <property name="CreateFromType">File</property>
                 <property name="StatusGroup">Archives_ArchiveFileStatus</property>
                 <property name="Status">Editable</property>
             </execute>
+            <trigger event="UI_ACCESSCHECK" method="checkAccess2ArchiveRoot"
+                name="Archives_DocumentTree_File_Menu_Action_CreateFile.UI_ACCESSCHECK"
+                program="org.efaps.esjp.archives.Archive">
+                <property name="Inverse">true</property>
+            </trigger>
         </target>
         <property name="Target">modal</property>
         <property name="TargetCreateType">Archives_ArchiveFile</property>

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!--
 
  Copyright 2003 - 2016 The eFaps Team
@@ -17,28 +16,33 @@
  limitations under the License.
 
 -->
-
 <ui-command xmlns="http://www.efaps.org/xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.efaps.org/xsd http://www.efaps.org/xsd/eFaps_1.0.xsd">
-    <uuid>0a63ba1e-f5da-4b75-bbc3-639e8bb80860</uuid>
+    <uuid>cf7e79fe-8786-4335-9c72-72d474d5efbe</uuid>
     <file-application>eFapsApp-Archives</file-application>
     <definition>
         <version-expression>(version==latest)</version-expression>
-        <name>Archives_ArchiveMyDesk_Menu_Action_CreateFile</name>
+        <name>Archives_DocumentTree_File_Menu_Action_CreateNode</name>
         <access>
             <role>Archives_Admin</role>
             <role>Archives_Modifier</role>
         </access>
         <target>
-            <form>Archives_ArchiveFileForm</form>
-            <execute program="org.efaps.esjp.archives.Archive" method="createMultiple">
-                <property name="CreateFromType">File</property>
-                <property name="StatusGroup">Archives_ArchiveFileStatus</property>
+            <form>Archives_ArchiveNodeForm</form>
+            <execute method="createMultiple" program="org.efaps.esjp.archives.Archive">
+                <property name="CreateFromType">Node</property>
+                <property name="StatusGroup">Archives_ArchiveNodeStatus</property>
                 <property name="Status">Editable</property>
             </execute>
+            <trigger event="UI_ACCESSCHECK" method="checkAccess2ArchiveRoot"
+                name="Archives_DocumentTree_File_Menu_Action_CreateNode.UI_ACCESSCHECK"
+                program="org.efaps.esjp.archives.Archive">
+                <property name="Inverse">true</property>
+            </trigger>
         </target>
         <property name="Target">modal</property>
-        <property name="TargetCreateType">Archives_ArchiveFile</property>
+        <property name="TargetCreateType">Archives_ArchiveNode</property>
+        <property name="TargetConnectAttribute">Archives_ArchiveNode/ParentLink</property>
         <property name="TargetMode">create</property>
         <property name="WindowHeight">460</property>
         <property name="WindowWidth">515</property>

@@ -33,6 +33,7 @@ import java.util.UUID;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import org.apache.commons.lang3.BooleanUtils;
 import org.efaps.admin.access.AccessSet;
 import org.efaps.admin.datamodel.Status;
 import org.efaps.admin.datamodel.Type;
@@ -60,6 +61,7 @@ import org.efaps.esjp.common.AbstractCommon;
 import org.efaps.esjp.common.file.FileUtil;
 import org.efaps.esjp.common.parameter.ParameterUtil;
 import org.efaps.esjp.common.uiform.Create;
+import org.efaps.esjp.db.InstanceUtils;
 import org.efaps.util.EFapsException;
 
 /**
@@ -336,6 +338,7 @@ public abstract class Archive_Base
 
         final Type type = getObject2ArchiveType(_parameter);
         if (type != null) {
+            final boolean inverse = BooleanUtils.toBoolean(getProperty(_parameter, "Inverse"));
             final QueryBuilder queryBldr = new QueryBuilder(type);
             if (getProperty(_parameter, "AttributeLink") != null) {
                 queryBldr.addWhereAttrEqValue(getProperty(_parameter, "AttributeLink"), _parameter.getInstance());
@@ -344,7 +347,9 @@ public abstract class Archive_Base
             }
             final MultiPrintQuery multi = queryBldr.getPrint();
             multi.execute();
-            if (multi.getInstanceList().size() == 0) {
+            final boolean access = multi.getInstanceList().size() == 0;
+
+            if (!inverse && access || inverse && !access) {
                 ret.put(ReturnValues.TRUE, true);
             }
         }
@@ -362,8 +367,10 @@ public abstract class Archive_Base
         throws EFapsException
     {
         final Return ret = new Return();
+        final boolean inverse = BooleanUtils.toBoolean(getProperty(_parameter, "Inverse"));
         final Type type = getObject2ArchiveType(_parameter);
-        if (type != null) {
+        final boolean access = type != null;
+        if (!inverse && access || inverse && !access) {
             ret.put(ReturnValues.TRUE, true);
         }
         return ret;
@@ -382,10 +389,12 @@ public abstract class Archive_Base
         Type ret = null;
         String typeStr = null;
         final Properties properties = Archives.OBJ2ARCHCONFIG.get();
-        if (_parameter.getInstance() != null && _parameter.getInstance().isValid()
-                        && properties.containsKey(
-                                        _parameter.getInstance().getType().getName() + ".Object2ArchiveType")) {
+        if (InstanceUtils.isValid(_parameter.getInstance()) && properties.containsKey(_parameter.getInstance().getType()
+                        .getName() + ".Object2ArchiveType")) {
             typeStr = properties.getProperty(_parameter.getInstance().getType().getName() + ".Object2ArchiveType");
+        } else if (InstanceUtils.isValid(_parameter.getCallInstance()) && properties.containsKey(_parameter
+                        .getCallInstance().getType().getName() + ".Object2ArchiveType")) {
+            typeStr = properties.getProperty(_parameter.getCallInstance().getType().getName() + ".Object2ArchiveType");
         } else if (containsProperty(_parameter, "Object2ArchiveType")) {
             typeStr = getProperty(_parameter, "Object2ArchiveType");
         } else if (containsProperty(_parameter, "Archives_ConnectType")) {
@@ -414,7 +423,7 @@ public abstract class Archive_Base
                 final ZipInputStream zis = new ZipInputStream(new BufferedInputStream(input));
                 ZipEntry entry;
                 final FileUtil fileUtil = new FileUtil();
-                final List<File> files = new ArrayList<File>();
+                final List<File> files = new ArrayList<>();
                 while ((entry = zis.getNextEntry()) != null) {
                     int size;
                     final byte[] buffer = new byte[2048];
