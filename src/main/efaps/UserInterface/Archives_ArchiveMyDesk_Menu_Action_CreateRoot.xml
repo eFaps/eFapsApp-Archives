@@ -2,7 +2,7 @@
 
 <!--
 
- Copyright 2003 - 2011 The eFaps Team
+ Copyright 2003 - 2016 The eFaps Team
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -16,40 +16,26 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 
- Author:          The eFaps Team
- Revision:        $Rev$
- Last Changed:    $Date$
- Last Changed By: $Author$
 
 -->
 
-<ui-command xmlns="http://www.efaps.org/xsd"
-            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-            xsi:schemaLocation="http://www.efaps.org/xsd http://www.efaps.org/xsd/eFaps_1.0.xsd">
+<ui-command xmlns="http://www.efaps.org/xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.efaps.org/xsd http://www.efaps.org/xsd/eFaps_1.0.xsd">
     <uuid>a431f398-7482-4579-937a-f27e6b8ce671</uuid>
     <file-application>eFapsApp-Archives</file-application>
-    <file-revision>$Rev$</file-revision>
     <definition>
         <version-expression>(version==latest)</version-expression>
         <name>Archives_ArchiveMyDesk_Menu_Action_CreateRoot</name>
         <access>
             <role>Archives_Admin</role>
         </access>
-
-        <!-- target definitions -->
         <target>
             <form>Archives_ArchiveRootForm</form>
-            <execute program="org.efaps.esjp.archives.Archive" method="createRoot" >
+            <execute program="org.efaps.esjp.archives.Archive" method="createRoot">
                 <property name="StatusGroup">Archives_ArchiveNodeStatus</property>
                 <property name="Status">Editable</property>
             </execute>
-            <trigger program="org.efaps.esjp.archives.Archive" method="checkAccess2ArchiveRoot"
-                name="Archives_ArchiveMyDesk_Menu_Action_CreateRoot.UI_ACCESSCHECK" event="UI_ACCESSCHECK" >
-                <property name="activeAccessCheck">false</property>
-            </trigger>
         </target>
-
-        <!-- properties -->
         <property name="Target">modal</property>
         <property name="TargetCreateType">Archives_ArchiveRoot</property>
         <property name="TargetMode">create</property>

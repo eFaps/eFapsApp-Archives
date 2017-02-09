@@ -200,10 +200,17 @@ public abstract class Archive_Base
         String accessSetStr = null;
 
         final Properties properties = Archives.OBJ2ARCHCONFIG.get();
-        if (properties.containsKey(_parameter.getInstance().getType().getName() + ".DefaultRole")
-                        && properties.containsKey(_parameter.getInstance().getType().getName() + ".DefaultAccessSet")) {
-            roleStr = properties.getProperty(_parameter.getInstance().getType().getName() + ".DefaultRole");
-            accessSetStr = properties.getProperty(_parameter.getInstance().getType().getName() + ".DefaultAccessSet");
+        String key;
+        if (InstanceUtils.isValid(_parameter.getInstance())) {
+            key  = _parameter.getInstance().getType().getName();
+        } else {
+            key = "ARCHIVES";
+        }
+
+        if (properties.containsKey(key + ".DefaultRole")
+                        && properties.containsKey(key + ".DefaultAccessSet")) {
+            roleStr = properties.getProperty(key + ".DefaultRole");
+            accessSetStr = properties.getProperty(key + ".DefaultAccessSet");
         } else if (containsProperty(_parameter, "DefaultRole") && containsProperty(_parameter, "DefaultAccessSet")) {
             roleStr = getProperty(_parameter, "DefaultRole");
             accessSetStr = getProperty(_parameter, "DefaultAccessSet");
