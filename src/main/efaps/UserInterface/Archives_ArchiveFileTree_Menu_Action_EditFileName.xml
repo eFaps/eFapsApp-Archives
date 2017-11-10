@@ -33,7 +33,7 @@ xsi:schemaLocation="http://www.efaps.org/xsd http://www.efaps.org/xsd/eFaps_1.0.
         <target>
             <form>Archives_ArchiveFileStoreForm</form>
             <execute program="org.efaps.esjp.archives.Archive" method="editFileName" />
-            <trigger program="org.efaps.esjp.admin.access.AccessOnField"
+            <trigger program="org.efaps.esjp.admin.access.AccessCheck4UI"
                 method="configCheck"
                 name="Archives_ArchiveFileTree_Menu_Action_UploadVersion.UI_ACCESSCHECK"
                 event="UI_ACCESSCHECK">
