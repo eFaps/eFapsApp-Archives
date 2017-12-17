@@ -1,6 +1,7 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><!--
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
 
-  Copyright 2003 - 2011 The eFaps Team
+  Copyright 2003 - 2017 The eFaps Team
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -14,29 +15,29 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 
-  Author:          The eFaps Team
-  Revision:        $Rev$
-  Last Changed:    $Date$
-  Last Changed By: $Author$
-
 -->
 <ui-menu xmlns="http://www.efaps.org/xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.efaps.org/xsd http://www.efaps.org/xsd/eFaps_1.0.xsd">
     <uuid>89046fe1-b159-44b1-b2b4-7876299577fb</uuid>
     <file-application>eFapsApp-Archives</file-application>
-    <file-revision>$Rev$</file-revision>
     <definition>
         <version-expression>(version==latest)</version-expression>
         <name>Archives_ArchiveFileTree_Version</name>
-        <!-- target definitions -->
         <target>
             <table>Archives_VersionTable</table>
             <evaluate program="org.efaps.esjp.common.uitable.MultiPrint">
                 <property name="Type">Archives_Version</property>
                 <property name="LinkFrom">FileLink</property>
             </evaluate>
+            <trigger program="org.efaps.esjp.admin.access.AccessCheck4UI"
+                method="configCheck"
+                name="Archives_ArchiveFileTree_Version.UI_ACCESSCHECK.1"
+                event="UI_ACCESSCHECK" index="1">
+                <!-- Archives-Configuration -->
+                <property name="SystemConfig">18c6c5fb-fa59-4951-8f67-fc6644dccb44</property>
+                <property name="Attribute">org.efaps.archives.ActivateVersioning</property>
+            </trigger>
         </target>
-        <!-- properties -->
         <property name="Target">content</property>
         <property name="TargetMode">view</property>
     </definition>

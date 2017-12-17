@@ -41,6 +41,11 @@
             <property name="Label">Archives_ArchiveFile/Date.Label</property>
             <property name="HRef">${COMMONURL}/MenuTree.jsp</property>
         </field>
+        <field name="fileName">
+            <property name="Select">linkto[ToLinkAbstract].file.label</property>
+            <property name="Label">Archives_ArchiveFileForm.fileName.label</property>
+            <property name="UIProvider">org.efaps.admin.datamodel.ui.StringUI</property>
+        </field>
         <field name="checkout">
             <icon>Action_View</icon>
             <property name="SelectAlternateOID">linkto[ToLinkAbstract].oid</property>
