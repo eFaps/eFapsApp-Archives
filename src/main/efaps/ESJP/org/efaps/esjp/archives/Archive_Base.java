@@ -1,5 +1,5 @@
 /*
- * Copyright 2003 - 2016 The eFaps Team
+ * Copyright 2003 - 2022 The eFaps Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -65,7 +65,6 @@ import org.efaps.esjp.db.InstanceUtils;
 import org.efaps.util.EFapsException;
 
 /**
- * TODO description!
  *
  * @author The eFasp Team
  */
@@ -529,6 +528,27 @@ public abstract class Archive_Base
         }
     }
 
+
+    public Return getHasArchivesFieldValue(final Parameter _parameter)
+        throws EFapsException
+    {
+        final Return ret = new Return();
+        final Instance instance = _parameter.getInstance() == null
+                        ? _parameter.getCallInstance() : _parameter.getInstance();
+        final String typeStr = getProperty(_parameter, "Type");
+        final Type type = Type.get(typeStr);
+        final String linkFrom = getProperty(_parameter, "LinkFrom");
+        final QueryBuilder queryBldr = new QueryBuilder(type);
+        queryBldr.addWhereAttrEqValue(linkFrom, instance);
+        final List<Instance> query = queryBldr.getQuery().executeWithoutAccessCheck();
+        if (query.isEmpty()) {
+            ret.put(ReturnValues.SNIPLETT, "");
+        } else {
+            ret.put(ReturnValues.SNIPLETT, query.size() + " archivos");
+        }
+        return ret;
+    }
+
     /**
      * The Class FileItem.
      */
@@ -547,7 +567,7 @@ public abstract class Archive_Base
          */
         public FileItem(final File _file)
         {
-            this.file = _file;
+            file = _file;
         }
 
         /**
@@ -567,7 +587,7 @@ public abstract class Archive_Base
         public InputStream getInputStream()
             throws IOException
         {
-            return new FileInputStream(this.file);
+            return new FileInputStream(file);
         }
 
         /**
@@ -576,7 +596,7 @@ public abstract class Archive_Base
         @Override
         public long getSize()
         {
-            return this.file.length();
+            return file.length();
         }
 
         /**
@@ -594,7 +614,7 @@ public abstract class Archive_Base
         @Override
         public String getName()
         {
-            return this.file.getName();
+            return file.getName();
         }
 
         /**
