@@ -15,7 +15,6 @@
  *
  */
 
-
 package org.efaps.esjp.archives.listener;
 
 import java.util.Properties;
@@ -28,13 +27,13 @@ import org.efaps.admin.event.Parameter.ParameterValues;
 import org.efaps.admin.program.esjp.EFapsApplication;
 import org.efaps.admin.program.esjp.EFapsUUID;
 import org.efaps.db.Insert;
+import org.efaps.db.Instance;
 import org.efaps.esjp.archives.Archive;
 import org.efaps.esjp.archives.util.Archives;
 import org.efaps.esjp.ci.CIArchives;
 import org.efaps.esjp.common.AbstractCommon;
 import org.efaps.esjp.common.listener.ITypedClass;
 import org.efaps.esjp.common.parameter.ParameterUtil;
-import org.efaps.esjp.erp.CommonDocument_Base.CreatedDoc;
 import org.efaps.esjp.erp.listener.IOnCreateDocument;
 import org.efaps.util.EFapsException;
 
@@ -50,18 +49,19 @@ public abstract class OnCreateDocument_Base
     extends AbstractCommon
     implements IOnCreateDocument
 {
+
     /**
      * {@inheritDoc}
      */
     @Override
     public void afterCreate(final Parameter _parameter,
-                            final CreatedDoc _createdDoc)
+                            final Instance instance)
         throws EFapsException
     {
         final Parameter parameter = ParameterUtil.clone(_parameter);
-        parameter.put(ParameterValues.INSTANCE, _createdDoc.getInstance());
+        parameter.put(ParameterValues.INSTANCE, instance);
 
-        final String typeName = _createdDoc.getInstance().getType().getName();
+        final String typeName = instance.getType().getName();
         final Properties properties = Archives.OBJ2ARCHCONFIG.get();
 
         // if one of them has the config
@@ -87,15 +87,15 @@ public abstract class OnCreateDocument_Base
             final Insert insertRoot2Proj = new Insert(connectType);
             if (containsProperty(parameter, "Archives_ConnectParentAttribute")) {
                 insertRoot2Proj.add(getProperty(parameter, "Archives_ConnectParentAttribute"),
-                                _createdDoc.getInstance());
+                                instance);
             } else {
                 insertRoot2Proj.add(CIArchives.Document2ArchiveAbstract.FromLinkAbstract, parameter.getInstance());
             }
             insertRoot2Proj.add(CIArchives.Object2ArchiveAbstract.ToLinkAbstract, insertRoot.getInstance());
             insertRoot2Proj.executeWithoutAccessCheck();
 
-            new Archive().addDefaultRole(parameter, _createdDoc.getInstance(), insertRoot.getInstance());
-            new Archive().addDefaultFolders(_parameter, _createdDoc.getInstance(), insertRoot.getInstance());
+            new Archive().addDefaultRole(parameter, instance, insertRoot.getInstance());
+            new Archive().addDefaultFolders(_parameter, instance, insertRoot.getInstance());
         }
     }
 
@@ -110,7 +110,6 @@ public abstract class OnCreateDocument_Base
         // not used in this implementation
         return "";
     }
-
 
     @Override
     public int getWeight()
