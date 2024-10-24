@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><!--
 
     Copyright © 2003 - 2024 The eFaps Team (-)
 
@@ -16,21 +15,27 @@
     limitations under the License.
 
 -->
-
-<ui-menu
+<ui-command
     xmlns="http://www.efaps.org/xsd"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.efaps.org/xsd http://www.efaps.org/xsd/eFaps_1.0.xsd"
 >
-    <uuid>20638332-8177-4aa7-9c46-5cd78d0c567d</uuid>
+    <uuid>96ca7829-bda2-4d3b-b2fa-873feba287d4</uuid>
     <file-application>eFapsApp-Archives</file-application>
     <definition>
         <version-expression>(version==latest)</version-expression>
-        <name>Archives_MyDesk</name>
-        <icon>Archives_MyDeskImg</icon>
-        <childs>
-            <child>Archives_ArchiveMyDesk</child>
-            <child>Archives_ArchiveViewMyDesk</child>
-        </childs>
+        <name>Archives_ArchiveViewMyDesk</name>
+        <access>
+            <role>Archives_Admin</role>
+            <role>Archives_Modifier</role>
+            <role>Archives_Reader</role>
+        </access>
+        <target>
+            <table>Archives_ArchiveTable</table>
+            <evaluate program="org.efaps.esjp.common.uitable.MultiPrint">
+                <property name="Type">Archives_ArchiveFileAbstract</property>
+            </evaluate>
+        </target>
+        <property name="Target">content</property>
     </definition>
-</ui-menu>
+</ui-command>
